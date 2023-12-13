@@ -10,19 +10,12 @@
             @sub.Id_Company
             </div>
         
-
             <div>
-                    
             @sub.StartDate - @sub.EndDate;
             </div>
         </div>
 
-
-
-    <form method="get" asp-action="ManageSub" asp-controller="Subs">
-            <input type="hidden" id="subscrption" name="subscrption" value="@sub" />
-        <button type="submit">Zarządzaj subskrypcją</button>
-    </form>
+        <a asp-controller="Subs" asp-action="ManageSub" asp-route-id="@sub">Manage This Subscription</a>
     }
 
 

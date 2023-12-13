@@ -101,24 +101,51 @@ namespace SchiftPlanner.Controllers
 
 
         [HttpPost]
-        public async Task<Subscriptions> ChangeAutoRenew(Subscriptions subscription)
+        public async Task<IActionResult> ChangeAutoRenew(Subscriptions subscription)
         {
-            //Dodać logike 
-            return subscription;
+            Subscriptions UpdateSubscriptions = _context.Subscriptions.FirstOrDefault(s => s.Id_Sub == subscription.Id_Sub);
+
+
+            if (UpdateSubscriptions.AutoRenew == true)
+            {
+                UpdateSubscriptions.AutoRenew = false;
+            }
+            else
+            {
+                UpdateSubscriptions.AutoRenew = true;
+            }
+
+            _context.SaveChanges();
+            
+            return await ManageSub(subscription);
         }
+
+
 
         [HttpPost]
-        public async Task<Subscriptions> CancelSubscription(Subscriptions subscription)
+        public async Task<IActionResult> CancelSubscription(Subscriptions subscription)
         {
-            //Dodać logike
-            return subscription;
+
+            Subscriptions UpdateSubscriptions = _context.Subscriptions.FirstOrDefault(s => s.Id_Sub == subscription.Id_Sub);
+
+            if (UpdateSubscriptions.AutoRenew == true)
+            {
+                UpdateSubscriptions.AutoRenew = false;
+            }
+            else
+            {
+                UpdateSubscriptions.AutoRenew = true;
+            }
+
+            _context.SaveChanges();
+
+            return await ManageSub(subscription);
         }
 
 
 
 
 
-        //zmiana subskrypcji na inną !!!!!!!!!!!
 
 
 
