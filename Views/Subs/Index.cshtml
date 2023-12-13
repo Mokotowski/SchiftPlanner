@@ -1,0 +1,64 @@
+﻿@model List<SchiftPlanner.Models.Subs.Type_Subscriptions>
+@using SchiftPlanner.Models.Subs
+
+@{
+    <div id="ListSubs">
+        @foreach (Type_Subscriptions sub in Model)
+        {
+            <div class="SubElement">
+                 <div>
+                    Id_sub: @sub.Id_Sub
+                </div>
+
+                <div>
+                    Price: @sub.Price
+                </div>
+
+                <div>
+                    Time Length: @sub.DateLenght
+                </div>
+
+                <div>
+                    Max Plans: @sub.MaxPlann
+                </div>
+
+                <div>
+                    Max Persons: @sub.MaxPersonforPlann
+                </div>
+
+                <div>
+                    <form method="post" asp-action="ThanksForBuy" asp-controller="Subs">
+                        <input type="hidden" id="Id_Sub" name="Id_Sub" value="@sub.Id_Sub" />
+                        <button type="submit">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+        }zz
+    </div>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+
+
+Tabela przewiada z lewej do prawej o tym co daje który plan gdzie po kliknięciu przekierowywuje na stronę z dokłądnym info
+<br />
+
+na dole każdego elemtn napis po kliknięciu otwiera płatności i wywołuje nowa subskrypcje
+
