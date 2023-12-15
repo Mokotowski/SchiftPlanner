@@ -1,0 +1,27 @@
+﻿@model List<SchiftPlanner.Models.Subs.Subscriptions>;
+
+
+
+
+    @foreach(var sub in Model)
+    {
+        <div>
+            <div>
+            @sub.Id_Company
+            </div>
+        
+            <div>
+            @sub.StartDate - @sub.EndDate;
+            </div>
+        </div>
+
+         <form method="get" asp-action="ManageSub" asp-controller="Subs">
+            <input type="hidden" id="Id_Sub" name="Id_Sub" value="@sub.Id_Sub" />
+            <button type="submit">Zarządzaj</button>
+        </form>
+
+    }
+
+
+
+

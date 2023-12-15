@@ -1,0 +1,39 @@
+﻿@model SchiftPlanner.ModelsForViews.ComapnyAndOpinions
+@using SchiftPlanner.Models.Company
+
+<header>
+    <h1>Welcome to @Model.ComapnyInfo.CompanyName</h1>
+    <img src="@Model.ComapnyInfo.LogoUrl" alt="Company Logo" />
+    
+    @if(Model.Note > -1)
+    {
+            <div> Ocena Firmy:@Model.Note </div>        
+    }
+
+    else
+    {
+        <div>Firma nie osiada ocen </div>        
+    }
+
+
+</header>
+
+<section>
+    <h2>About Us</h2>
+    <p>@Model.ComapnyInfo.Description</p>
+</section>
+
+
+    <div id="Opinions">
+
+        @foreach(var opinion in Model.Opinions)
+        {
+                
+                <p> <h6>@opinion.Score</h6>
+                
+                    @opinion.Text
+                </p>
+        }
+        
+
+    </div>

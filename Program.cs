@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using SchiftPlanner;
 using SchiftPlanner.Models;
+using SchiftPlanner.Services;
+using SchiftPlanner.Services.Interfaces;
 using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -64,12 +66,12 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 
-builder.Services.AddTransient<IEmailSender, EmailSender>(); 
-
 
 builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddSingleton<IEmailSender, EmailSender>();
+builder.Services.AddScoped<ISubsServices, SubsServices>();
+builder.Services.AddScoped<IOpinionServices, OpinionServices>();
 
 
 
