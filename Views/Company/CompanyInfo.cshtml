@@ -32,7 +32,7 @@
     <form method="post" asp-action="AddOpinion" asp-controller="Company">
 
         <label for="IsAnonymously">Czy opinia ma być anonimowa</label>
-        <input type="checkbox" id="IsAnonymously" name="IsAnonymously" value="" title="Czy chcesz aby opinia była anonimowa">
+        <input type="checkbox" name="IsAnonymously" value="true" title="Czy chcesz aby opinia była anonimowa">
 
 
         <label for="OpinionScore">Podaj od 0 10 ocene firmy</label>
@@ -84,13 +84,30 @@
 
         <form id="editOpinionForm" method="post" asp-action="EditOpinion" asp-controller="Company" style="display: none;">
             <label for="IsAnonymously">Czy opinia ma być anonimowa</label>
-            <input type="checkbox" id="IsAnonymously" name="IsAnonymously" value="@Model.YourOpinion.Anonymously" title="Czy chcesz, aby opinia była anonimowa">
+
+            @if(Model.YourOpinion.Anonymously)
+            {
+                <input type="checkbox" name="IsAnonymously" value="true" title="Czy chcesz, aby opinia była anonimowa" checked>
+            }
+            else
+            {
+                <input type="checkbox" name="IsAnonymously" value="true" title="Czy chcesz, aby opinia była anonimowa">
+            }
+
 
             <label for="OpinionScore">Podaj od 0 do 10 ocenę firmy</label>
             <select id="OpinionScore" name="OpinionScore" value=@Model.YourOpinion.Score>
                 @for (int i = 0; i <= 10; i++)
                 {
-                    <option value="@i">@i</option>
+                    if(i==Model.YourOpinion.Score)
+                    {
+                        <option value="@i" selected>@i</option>
+
+                    }
+                    else
+                    {
+                        <option value="@i">@i</option>
+                    }
                 }
             </select>
 
