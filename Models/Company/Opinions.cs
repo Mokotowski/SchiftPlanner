@@ -11,7 +11,7 @@ namespace SchiftPlanner.Models.Company
         public bool Anonymously { get; set; }
         public string Id_user { get; set; }
         [Required]
-        public short Score { get; set; }  
+        public int Score { get; set; }  
         public string Text { get; set; }
 
         public DateTime DateAdd { get; set; }

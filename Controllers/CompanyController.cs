@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Options;
 using SchiftPlanner.Models;
 using SchiftPlanner.Models.Company;
 using SchiftPlanner.ModelsForViews;
@@ -32,8 +33,24 @@ namespace SchiftPlanner.Controllers
 
             comapnyAndOpinions.ComapnyInfo = _context.CompanyInfo.FirstOrDefault(s => s.Id_Company == Id_Company);
             comapnyAndOpinions.Note = await _opinionServices.NoteCompany(companyInfo);
-            List<Opinions> GetOpinions = await _opinionServices.Opinions(companyInfo);
-            comapnyAndOpinions.Opinions = GetOpinions;
+            comapnyAndOpinions.Opinions = await _opinionServices.Opinions(companyInfo);
+
+
+            UserModel actualUser = await _userManager.GetUserAsync(User);
+            if(actualUser != null) 
+            { 
+                foreach(Opinions opinion in comapnyAndOpinions.Opinions)
+                {
+                    if(opinion.Id_user == actualUser.Id)
+                    {
+                        comapnyAndOpinions.YourOpinion = opinion;
+                        break;
+                    }
+                }
+            }
+
+
+
 
             return View(comapnyAndOpinions);
         }
@@ -48,10 +65,28 @@ namespace SchiftPlanner.Controllers
             return View(opinions);
         }
 
+
+
+
+
+
+
         [HttpPost]
-        public async Task<IActionResult> AddOpinion(CompanyInfo companyInfo, Opinions opinion)
+        public async Task AddOpinion(int Id_Company, bool IsAnonymously, int OpinionScore, string OpinionText)
         {
-            return await CompanyInfo(companyInfo.Id_Company);
+            _opinionServices.AddOpinions(Id_Company, IsAnonymously, OpinionScore, OpinionText, await _userManager.GetUserAsync(User));
+        }
+
+        [HttpPost]
+        public async Task DeleteOpinion(int Id)
+        {
+            _opinionServices.DeleteOpinions(Id);
+        }
+
+        [HttpPost]
+        public async Task EditOpinion(int Id, bool IsAnonymously, int OpinionScore, string OpinionText)
+        {
+            _opinionServices.EditOpinions(Id, IsAnonymously, OpinionScore, OpinionText);
         }
     }
 }

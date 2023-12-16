@@ -24,16 +24,121 @@
 </section>
 
 
+
+
+
+@if (Model.YourOpinion == null)
+{
+    <form method="post" asp-action="AddOpinion" asp-controller="Company">
+
+        <label for="IsAnonymously">Czy opinia ma być anonimowa</label>
+        <input type="checkbox" id="IsAnonymously" name="IsAnonymously" value="" title="Czy chcesz aby opinia była anonimowa">
+
+
+        <label for="OpinionScore">Podaj od 0 10 ocene firmy</label>
+        <select id="OpinionScore" name="OpinionScore">
+            @for (int i = 0; i <= 10; i++)
+            {
+                <option value="@i">@i</option>
+            }
+        </select>
+
+        <label for="OpinionText">Napisz opinie</label>
+        <input type="text" id="OpinionText" name="OpinionText" value="" placeholder="Napisz opinie co ci się podoba lub nie w tej firmie" required pattern="[A-Za-z]+" title="Napisz opinie" maxlength="50" minlength="10" size="30">
+
+        <input type="hidden" id="Id_Company" name="Id_Company" value="@Model.ComapnyInfo.Id_Company" />
+
+
+
+
+        <button type="submit">Dodaj opinie</button>
+    </form>
+}
+
+
+
+
+
+
+    @if(Model.YourOpinion != null)
+    {
+    <div id="YourOpinion">
+        <br />
+        <br />
+        Twoja opinia:
+        <br /><br /><br />
+
+        <p>
+            <h6>@Model.YourOpinion.Score</h6>
+
+            @Model.YourOpinion.Text
+        </p>
+
+        <form method="post" asp-action="DeleteOpinion" asp-controller="Company">
+            <input type="hidden" name="Id" value="@Model.YourOpinion.Id" />
+
+            <button type="submit">Usuń opinie</button>
+        </form>
+
+        <button type="button" onclick="showEditForm()">Edytuj opinię</button>
+
+        <form id="editOpinionForm" method="post" asp-action="EditOpinion" asp-controller="Company" style="display: none;">
+            <label for="IsAnonymously">Czy opinia ma być anonimowa</label>
+            <input type="checkbox" id="IsAnonymously" name="IsAnonymously" value="@Model.YourOpinion.Anonymously" title="Czy chcesz, aby opinia była anonimowa">
+
+            <label for="OpinionScore">Podaj od 0 do 10 ocenę firmy</label>
+            <select id="OpinionScore" name="OpinionScore" value=@Model.YourOpinion.Score>
+                @for (int i = 0; i <= 10; i++)
+                {
+                    <option value="@i">@i</option>
+                }
+            </select>
+
+            <label for="OpinionText">Napisz opinię</label>
+            <input type="text" id="OpinionText" name="OpinionText" placeholder="Napisz opinie co ci się podoba lub nie w tej firmie" value=@Model.YourOpinion.Text required pattern="[A-Za-z]+" title="Napisz opinię" maxlength="50" minlength="10" size="30">
+
+            <input type="hidden" id="Id" name="Id" value="@Model.YourOpinion.Id"/>
+
+            <button type="submit">Zapisz edycję opinii</button>
+        </form>
+
+        <script>
+            function showEditForm() {
+                var editForm = document.getElementById("editOpinionForm");
+
+                editForm.style.display = "block";
+            }
+        </script>
+
+
+    </div>
+    }
+
+
+
+
+    
     <div id="Opinions">
+        <br />
+        <br />
+        Wszystkie opinie:
+    <br /><br /><br />
 
         @foreach(var opinion in Model.Opinions)
         {
-                
-                <p> <h6>@opinion.Score</h6>
-                
-                    @opinion.Text
-                </p>
+                if(opinion.Id != Model.YourOpinion.Id)
+                {
+                    <p>
+                        <h6>@opinion.Score</h6>
+
+                            @opinion.Text
+                    </p>
+
+
+                }
+
+
         }
         
 
-    </div>
+    </div>                               

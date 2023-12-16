@@ -1,4 +1,5 @@
-﻿using SchiftPlanner.Models.Company;
+﻿using SchiftPlanner.Models;
+using SchiftPlanner.Models.Company;
 
 namespace SchiftPlanner.ModelsForViews
 {
@@ -6,8 +7,11 @@ namespace SchiftPlanner.ModelsForViews
     {
         public CompanyInfo ComapnyInfo { get; set; }
 
+        public Opinions YourOpinion { get; set; }
+
+
         public List<Opinions> Opinions { get; set; }   
 
-        public short Note { get; set; }
+        public int Note { get; set; }
     }
 }
