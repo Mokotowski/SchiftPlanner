@@ -72,6 +72,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<IEmailSender, EmailSender>();
 builder.Services.AddScoped<ISubsServices, SubsServices>();
 builder.Services.AddScoped<IOpinionServices, OpinionServices>();
+builder.Services.AddScoped<ICustomer_TimeTableServices, Customer_TimeTableServices>();
 
 
 

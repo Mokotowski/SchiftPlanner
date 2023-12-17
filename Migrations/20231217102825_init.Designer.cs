@@ -12,7 +12,7 @@ using SchiftPlanner;
 namespace SchiftPlanner.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20231216174059_init")]
+    [Migration("20231217102825_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -359,8 +359,8 @@ namespace SchiftPlanner.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id_Timetable"));
 
-                    b.Property<DateTime>("Break_after_Client")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("Break_after_Client")
+                        .HasColumnType("int");
 
                     b.Property<int>("Column")
                         .HasColumnType("int");

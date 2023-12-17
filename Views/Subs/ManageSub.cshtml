@@ -44,6 +44,26 @@
 <br />
 <br />
 
+@if (ViewBag.CompanyType == 1)
+{
+    <form method="get" asp-action="ManageCustomer_TimeTables" asp-controller="Type1">
+        <input type="hidden" name="Id_Company" value="@Model.Id_Company" />
+        <button type="submit">Zarządzaj planami pracowników</button>
+    </form>
+}
+else if (ViewBag.CompanyType == 2)
+{
+    <form method="get" asp-action="ManageCustomer_TimeTables" asp-controller="Type2">
+        <input type="hidden" name="Id_Company" value="@Model.Id_Company" />
+        <button type="submit">Zarządzaj planami klientów</button>
+    </form>
+}
+
+<br />
+<br />
+<br />
+
+
 @{
     <div>
         @Model.Id_Company

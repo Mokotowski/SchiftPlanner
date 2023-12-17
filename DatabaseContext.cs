@@ -21,11 +21,23 @@ namespace SchiftPlanner
         public DbSet<CompanyInfo> CompanyInfo { get; set; }
         public DbSet<Opinions> Opinions { get; set; }
         public DbSet<SurveysProperties> SurveysProperties { get; set; }
+
+
+
         public DbSet<Company_Type1> Company_Type1 { get; set; }
+        public DbSet<Worker_Timetable> Worker_Timetable { get; set; }
+        public DbSet<Day_Worker_Timetable> Day_Worker_Timetable { get; set; }
+
+
+
 
         public DbSet<Company_Type2> Company_Type2 { get; set; }
+        public DbSet<Customer_Timetable> Customer_Timetable { get; set; }
+        public DbSet<Day_Customer_Timetable> Day_Customer_Timetable { get; set; }
 
-        
+
+
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

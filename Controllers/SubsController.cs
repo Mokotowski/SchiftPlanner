@@ -89,6 +89,10 @@ namespace SchiftPlanner.Controllers
         {
             Subscriptions subscription = _context.Subscriptions.FirstOrDefault(s => s.Id_Sub == Id_Sub);
 
+            Type_Subscriptions type_Subscriptions = _context.Type_Subscriptions.FirstOrDefault(s => s.Id_Sub == Id_Sub);
+
+            ViewBag.CompanyType = type_Subscriptions.TypeCompany;
+
             return View(subscription);
         }
 

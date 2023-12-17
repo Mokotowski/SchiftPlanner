@@ -354,7 +354,7 @@ namespace SchiftPlanner.Migrations
                     Id_Timetable = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Id_Company = table.Column<int>(type: "int", nullable: false),
-                    Break_after_Client = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Break_after_Client = table.Column<int>(type: "int", nullable: false),
                     Column = table.Column<int>(type: "int", nullable: false),
                     Simultant = table.Column<int>(type: "int", nullable: false)
                 },

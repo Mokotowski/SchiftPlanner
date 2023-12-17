@@ -1,0 +1,90 @@
+﻿@model List<SchiftPlanner.Models.Company.Type_2.Customer_Timetable>
+
+
+@{
+    ViewData["Title"] = "ManageCustomer_TimeTables";
+}
+
+<form method="post" asp-action="AddCustomer_TimeTables" asp-controller="Type2">
+    <input type="hidden" name="Id_Company" value="@ViewBag.Id_Company" />
+
+    <button type="submit">Dodaj Plan klientów</button>
+</form>
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+<div>
+    @foreach (var timetable in Model)
+    {
+        <div>
+            <p>Id_Timetable: @timetable.Id_Timetable</p>
+            <p>Id_Company: @timetable.Id_Company</p>
+            <p>Break_after_Client: @timetable.Break_after_Client</p>
+            <p>Column: @timetable.Column</p>
+            <p>Simultant: @timetable.Simultant</p>
+            <form method="post" asp-action="DeleteCustomer_TimeTables" asp-controller="Type2">
+                <input type="hidden" name="Id_Timetable" value="@timetable.Id_Timetable" />
+
+                <button type="submit">Usuń Plan klientów</button>
+            </form>
+
+
+            <br />
+            <br />
+
+
+
+            <button type="button" onclick="showEditForm()">Edytuj Plan klientów</button>
+
+            <form id="editOpinionForm" method="post" asp-action="EditCustomer_TimeTables" asp-controller="Type2" style="display: none;">
+
+                <label for="Break_after_Client">Break after Client:</label>
+                <input type="number" name="Break_after_Client" min="1" value=@(timetable.Break_after_Client) required>
+                <br>
+
+                <label for="Column">Column:</label>
+                <input type="number" name="Column" min="1" value=@(timetable.Column) required>
+                <br>
+
+                <!-- Simultant Input -->
+                <label for="Simultant">Simultant:</label>
+                <input type="number" name="Simultant" min="1" value=@(timetable.Simultant) required>
+                <br>
+
+
+
+
+
+                <input type="hidden" name="Id_Timetable" value="@timetable.Id_Timetable" />
+
+                <button type="submit">Zapisz edycję opinii</button>
+            </form>
+
+        </div>
+
+
+    }
+</div>
+
+
+
+
+
+
+
+
+<script>
+    function showEditForm() {
+        var editForm = document.getElementById("editOpinionForm");
+
+        editForm.style.display = "block";
+    }
+</script>
