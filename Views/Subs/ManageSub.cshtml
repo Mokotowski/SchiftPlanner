@@ -11,7 +11,38 @@
         <button type="submit">Pokaż strone firmy</button>
     </form>
 
+<br />
+<br />
+<br />
 
+<form method="get" asp-action="ManageCompanyInfo" asp-controller="Company">
+    <input type="hidden" name="Id_Company" value="@Model.Id_Company" />
+    <button type="submit">Zarządzaj stroną firmy</button>
+</form>
+
+<br />
+<br />
+<br />
+
+<form method="get" asp-action="ManageOpinions" asp-controller="Company">
+    <input type="hidden" name="Id_Company" value="@Model.Id_Company" />
+    <button type="submit">Zarządzaj opiniami</button>
+</form>
+
+
+
+<br />
+<br />
+<br />
+
+<form method="get" asp-action="GetQrCodeForCompanySite" asp-controller="Company">
+    <input type="hidden" name="Id_Company" value="@Model.Id_Company" />
+    <button type="submit">Uzyskaj qrcode przekierowywujący na stronę firmy</button>
+</form>
+
+<br />
+<br />
+<br />
 
 @{
     <div>

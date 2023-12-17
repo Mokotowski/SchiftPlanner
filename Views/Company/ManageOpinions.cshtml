@@ -1,1 +1,39 @@
-﻿@model SchiftPlanner.Models.Company.CompanyInfo
+﻿@model List<SchiftPlanner.Models.Company.Opinions>
+@using SchiftPlanner.Models.Company
+
+@{
+    ViewData["Title"] = "ManageOpinions";
+}
+
+<h1>ManageOpinions</h1>
+
+
+
+
+
+@foreach(Opinions opinion in Model)
+{
+    <div>
+        <h4>Ocena:</h4>
+        <p>@opinion.Score</p>
+
+        <h4>Opinia:</h4>
+        <p>@opinion.Text</p>
+
+        <h4>Anonimowa:</h4>
+        <p>@opinion.Anonymously ? "Tak" : "Nie")</p>
+    </div>
+
+
+
+    <form method="post" asp-action="DeleteOpinion" asp-controller="Company">
+        <input type="hidden" name="Id" value="@opinion.Id" />
+
+        <button type="submit">Usuń opinie</button>
+    </form>
+
+    <br />
+    <br />
+    <br />
+
+}

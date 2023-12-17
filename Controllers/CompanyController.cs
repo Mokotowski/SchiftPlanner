@@ -1,10 +1,17 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Options;
+using Microsoft.VisualStudio.Web.CodeGeneration;
 using SchiftPlanner.Models;
 using SchiftPlanner.Models.Company;
 using SchiftPlanner.ModelsForViews;
 using SchiftPlanner.Services.Interfaces;
+using System.Drawing;
+using System.Globalization;
+using System.Text.Encodings.Web;
+using QRCoder;
+
+
 
 namespace SchiftPlanner.Controllers
 {
@@ -49,18 +56,69 @@ namespace SchiftPlanner.Controllers
                 }
             }
 
-
-
-
             return View(comapnyAndOpinions);
         }
 
-        [HttpGet]
-        public IActionResult ManageOpinions(CompanyInfo companyInfo)
-        {
-            // LOGIKA pobierająca opinie dla firmy
 
-            List<Opinions> opinions = null;
+
+        [HttpGet]
+        public async Task<IActionResult> ManageCompanyInfo(int Id_Company)
+        {
+            // ssprawdzenie czy jest się ownerem
+            CompanyInfo companyInfo = _context.CompanyInfo.FirstOrDefault(s => s.Id_Company == Id_Company);
+
+
+
+            return View(companyInfo);
+        }
+
+        [HttpGet]
+        public IActionResult GetQrCodeForCompanySite(int Id_Company)
+        {
+            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode($"https://localhost:7014/Company/CompanyInfo/{Id_Company}", QRCodeGenerator.ECCLevel.Q);
+
+            using (QRCode qrCode = new QRCode(qrCodeData))
+            {
+                Bitmap qrCodeImage = qrCode.GetGraphic(20);
+
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    qrCodeImage.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                    byte[] qrCodeBytes = stream.ToArray();
+
+                    return File(qrCodeBytes, "image/png");
+                }
+            }
+        }
+
+
+
+        [HttpPost]
+        public async Task SaveCompanyInfo(int Id_Company, string CompanyName, string Description, string LogoUrl)
+        {
+            // ssprawdzenie czy jest się ownerem
+            CompanyInfo companyInfo = _context.CompanyInfo.FirstOrDefault(s => s.Id_Company == Id_Company);
+            companyInfo.CompanyName = CompanyName;
+            companyInfo.Description = Description;
+            companyInfo.LogoUrl = LogoUrl;
+
+            _context.SaveChanges();  
+        }
+
+
+
+
+
+
+
+
+        [HttpGet]
+        public IActionResult ManageOpinions(int Id_Company)
+        {
+            // LOGIKA pobierająca opinie dla firmy i ssprawdzenie czy jest się ownerem
+
+            List<Opinions> opinions = _context.Opinions.Where(c => c.Id_Company == Id_Company).ToList();
 
             return View(opinions);
         }

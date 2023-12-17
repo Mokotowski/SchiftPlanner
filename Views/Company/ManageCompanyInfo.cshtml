@@ -1,0 +1,33 @@
+﻿@model SchiftPlanner.Models.Company.CompanyInfo
+
+@{
+    ViewData["Title"] = "ManageCompanyInfo";
+}
+
+<h1>ManageCompanyInfo</h1>
+
+
+
+
+
+<form id="SaveCompanyInfo" method="post" asp-action="SaveCompanyInfo" asp-controller="Company">
+
+
+    <label for="CompanyName">Podaj nazwę firmy</label>
+    <input type="text" id="CompanyName" name="CompanyName" value="@(Model.CompanyName)" required pattern="[A-Za-z]+" title="Nazwa twojej firmy" maxlength="50" minlength="10" size="30">
+    <br /> <br />
+
+
+    <label for="Description">Napisz opis firmy</label>
+    <input type="text" id="Description" name="Description" value="@(Model.Description)" required title="Opisz czym zajmuje się twoja firma lub jej historia" maxlength="800" minlength="100" size="30" size="30" step="2">
+    <br /> <br />
+
+
+    <label for="LogoUrl">Link do logo</label>
+    <input type="text" id="LogoUrl" name="LogoUrl" value="@(Model.LogoUrl)" required title="Link do logo" size="30">
+    <br /> <br />
+
+    <input type="hidden" id="Id_Company" name="Id_Company" value="@Model.Id_Company" />
+
+    <button type="submit">Zapisz edycję opinii</button>
+</form>

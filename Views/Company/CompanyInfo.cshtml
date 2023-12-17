@@ -3,7 +3,9 @@
 
 <header>
     <h1>Welcome to @Model.ComapnyInfo.CompanyName</h1>
-    <img src="@Model.ComapnyInfo.LogoUrl" alt="Company Logo" />
+
+
+    <img src="@(Model.ComapnyInfo.LogoUrl)" width="300" height="300" alt="Company Logo" title="Company Logo" loading="lazy" />
     
     @if(Model.Note > -1)
     {
@@ -60,19 +62,21 @@
 
 
 
+
+
     @if(Model.YourOpinion != null)
     {
     <div id="YourOpinion">
-        <br />
-        <br />
-        Twoja opinia:
-        <br /><br /><br />
+        <div>
+            <h4>Ocena:</h4>
+            <p>@Model.YourOpinion.Score</p>
 
-        <p>
-            <h6>@Model.YourOpinion.Score</h6>
+            <h4>Opinia:</h4>
+            <p>@Model.YourOpinion.Text</p>
 
-            @Model.YourOpinion.Text
-        </p>
+            <h4>Anonimowa:</h4>
+            <p>@(Model.YourOpinion.Anonymously ? "Tak" : "Nie")</p>
+        </div>
 
         <form method="post" asp-action="DeleteOpinion" asp-controller="Company">
             <input type="hidden" name="Id" value="@Model.YourOpinion.Id" />
@@ -145,14 +149,26 @@
         {
                 if(opinion.Id != Model.YourOpinion.Id)
                 {
-                    <p>
-                        <h6>@opinion.Score</h6>
 
-                            @opinion.Text
-                    </p>
+            <br />
+            <br />
+            <br />
+            <div>
+                <h4>Ocena:</h4>
+                <p>@opinion.Score</p>
 
+                <h4>Opinia:</h4>
+                <p>@opinion.Text</p>
+
+                <h4>Anonimowa:</h4>
+                <p>@opinion.Anonymously ? "Tak" : "Nie")</p>
+            </div>
 
                 }
+
+
+
+
 
 
         }

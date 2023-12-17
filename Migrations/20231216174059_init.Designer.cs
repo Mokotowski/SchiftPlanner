@@ -12,7 +12,7 @@ using SchiftPlanner;
 namespace SchiftPlanner.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20231215131420_init")]
+    [Migration("20231216174059_init")]
     partial class init
     {
         /// <inheritdoc />
