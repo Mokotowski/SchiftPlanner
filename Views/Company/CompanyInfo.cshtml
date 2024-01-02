@@ -1,5 +1,6 @@
 ﻿@model SchiftPlanner.ModelsForViews.ComapnyAndOpinions
 @using SchiftPlanner.Models.Company
+@using SchiftPlanner.Models.Company.Type_2
 
 <header>
     <h1>Welcome to @Model.ComapnyInfo.CompanyName</h1>
@@ -28,9 +29,49 @@
 
 
 
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+@if(ViewBag.listId_Timetable.Count > 0)
+{
+    int i = 1;
+    @foreach (Customer_Timetable customer_Timetable in ViewBag.listId_Timetable)
+    {
+        <form method="get" asp-action="DayCustomerClaim" asp-controller="Type2">
+            <input type="hidden" name="Id_Timetable" value="@customer_Timetable.Id_Timetable" />
+
+            <button type="submit">Zajmi termin w grafiku</button>
+        </form>
+        <br />
+        <br />
+    }
+}
+
+
+
+
+
+
+
+
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+
 
 @if (Model.YourOpinion == null)
 {
+
+    <h2>Dodaj opinie</h2>
     <form method="post" asp-action="AddOpinion" asp-controller="Company">
 
         <label for="IsAnonymously">Czy opinia ma być anonimowa</label>
@@ -49,8 +90,6 @@
         <input type="text" id="OpinionText" name="OpinionText" value="" placeholder="Napisz opinie co ci się podoba lub nie w tej firmie" required pattern="[A-Za-z]+" title="Napisz opinie" maxlength="50" minlength="10" size="30">
 
         <input type="hidden" id="Id_Company" name="Id_Company" value="@Model.ComapnyInfo.Id_Company" />
-
-
 
 
         <button type="submit">Dodaj opinie</button>
@@ -127,11 +166,11 @@
             function showEditForm() {
                 var editForm = document.getElementById("editOpinionForm");
 
-                editForm.style.display = "block";
+                var currentDisplay = editForm.style.display;
+
+                editForm.style.display = (currentDisplay === "block") ? "none" : "block";
             }
         </script>
-
-
     </div>
     }
 
@@ -140,11 +179,8 @@
 
     
     <div id="Opinions">
-        <br />
-        <br />
         Wszystkie opinie:
-    <br /><br /><br />
-
+        <br />
         @foreach(var opinion in Model.Opinions)
         {
                 if(opinion.Id != Model.YourOpinion.Id)
@@ -165,13 +201,5 @@
             </div>
 
                 }
-
-
-
-
-
-
         }
-        
-
     </div>                               

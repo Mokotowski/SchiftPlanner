@@ -13,11 +13,13 @@ namespace SchiftPlanner.Services
     public class Customer_TimeTableServices : ICustomer_TimeTableServices
     {
         private readonly DatabaseContext _context;
-        public Customer_TimeTableServices(DatabaseContext context)
+        private readonly IDay_CustomerServicesFirstGenerate _firstGenerate;
+        public Customer_TimeTableServices(DatabaseContext context, IDay_CustomerServicesFirstGenerate firstGenerate)
         {
             _context = context;
+            _firstGenerate = firstGenerate;
         }
-        public async Task AddTable(int Id_Company)
+        public async Task<Customer_Timetable> AddTable(int Id_Company)
         {
             Company_Type2 company_Type2 = _context.Company_Type2.Where(s => s.Id_Company == Id_Company).FirstOrDefault();
             CompanyInfo companyInfo = _context.CompanyInfo.Where(s => s.Id_Company == company_Type2.Id_Company).FirstOrDefault();
@@ -40,18 +42,27 @@ namespace SchiftPlanner.Services
 
 
 
-                //Napisać system generowania dni 
-
-
-
 
                 _context.Customer_Timetable.Add(NewTimeTable);
                 _context.SaveChanges();
+
+                List<Day_Customer_Timetable> timetableDayList = await _firstGenerate.GenerateFirstDay_Customer_Timetable(NewTimeTable.Id_Timetable);
+                _context.Day_Customer_Timetable.AddRange(timetableDayList);
+                await _context.SaveChangesAsync();
+
+
+
+
+
+                DateTime currentDate = DateTime.Now.Date;
+
+
+
+                string polaczenie = NewTimeTable.Id_Timetable.ToString() + "." + currentDate.ToShortDateString();
+
+                return NewTimeTable;
             }
-
-
-
-
+            return new Customer_Timetable();
         }
         public async Task EditTable(int Id_Timetable, ushort Break_after_Client, ushort Column, ushort Simultant)
         {

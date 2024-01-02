@@ -1,3 +1,8 @@
+Przenieœci generowanie form i reszty na bo narazie wygl¹da to jak kod allona na fivemie
+
+
+
+
 Kupowanie
 
 -pierwszy raz

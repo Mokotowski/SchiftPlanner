@@ -37,6 +37,7 @@ namespace SchiftPlanner.Controllers
             ComapnyAndOpinions comapnyAndOpinions = new ComapnyAndOpinions();
             CompanyInfo companyInfo = _context.CompanyInfo.FirstOrDefault(s => s.Id_Company == Id_Company);
 
+            ViewBag.listId_Timetable = _context.Customer_Timetable.Where(s => s.Id_Company == Id_Company).ToList();
 
             comapnyAndOpinions.ComapnyInfo = _context.CompanyInfo.FirstOrDefault(s => s.Id_Company == Id_Company);
             comapnyAndOpinions.Note = await _opinionServices.NoteCompany(companyInfo);

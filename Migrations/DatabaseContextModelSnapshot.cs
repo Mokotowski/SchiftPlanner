@@ -191,11 +191,11 @@ namespace SchiftPlanner.Migrations
                     b.Property<bool>("IsWork")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("TimeEnd")
-                        .HasColumnType("datetime2");
+                    b.Property<TimeSpan>("TimeEnd")
+                        .HasColumnType("time");
 
-                    b.Property<DateTime>("TimeStart")
-                        .HasColumnType("datetime2");
+                    b.Property<TimeSpan>("TimeStart")
+                        .HasColumnType("time");
 
                     b.HasKey("Timetable_Day");
 
@@ -380,15 +380,21 @@ namespace SchiftPlanner.Migrations
                     b.Property<string>("Timetable_Day_User")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Id_Timetable")
+                        .HasColumnType("int");
+
                     b.Property<string>("Id_User")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("TimeEnd")
-                        .HasColumnType("datetime2");
+                    b.Property<TimeSpan>("TimeEnd")
+                        .HasColumnType("time");
 
-                    b.Property<DateTime>("TimeStart")
-                        .HasColumnType("datetime2");
+                    b.Property<TimeSpan>("TimeStart")
+                        .HasColumnType("time");
 
                     b.Property<string>("Timetable_Day")
                         .IsRequired()

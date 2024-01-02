@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SchiftPlanner.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class initt : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -419,8 +419,8 @@ namespace SchiftPlanner.Migrations
                     Id_Timetable = table.Column<int>(type: "int", nullable: false),
                     IsWork = table.Column<bool>(type: "bit", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TimeStart = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TimeEnd = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    TimeStart = table.Column<TimeSpan>(type: "time", nullable: false),
+                    TimeEnd = table.Column<TimeSpan>(type: "time", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -478,9 +478,11 @@ namespace SchiftPlanner.Migrations
                 columns: table => new
                 {
                     Timetable_Day_User = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id_Timetable = table.Column<int>(type: "int", nullable: false),
                     Timetable_Day = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    TimeStart = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TimeEnd = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TimeStart = table.Column<TimeSpan>(type: "time", nullable: false),
+                    TimeEnd = table.Column<TimeSpan>(type: "time", nullable: false),
                     Id_User = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>

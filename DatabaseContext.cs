@@ -27,6 +27,8 @@ namespace SchiftPlanner
         public DbSet<Company_Type1> Company_Type1 { get; set; }
         public DbSet<Worker_Timetable> Worker_Timetable { get; set; }
         public DbSet<Day_Worker_Timetable> Day_Worker_Timetable { get; set; }
+        public DbSet<Day_Worker_Claimed> Day_Worker_Claimed { get; set; }
+        public DbSet<Workers> Workers { get; set; }
 
 
 
@@ -34,9 +36,10 @@ namespace SchiftPlanner
         public DbSet<Company_Type2> Company_Type2 { get; set; }
         public DbSet<Customer_Timetable> Customer_Timetable { get; set; }
         public DbSet<Day_Customer_Timetable> Day_Customer_Timetable { get; set; }
+        public DbSet<Day_Customer_Claimed> Day_Customer_Claimed { get; set; }
 
 
-
+        
 
 
         protected override void OnModelCreating(ModelBuilder builder)

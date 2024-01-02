@@ -1,0 +1,266 @@
+﻿@model List<SchiftPlanner.Models.Company.Day_Customer_Timetable>
+
+
+@{
+    ViewData["Title"] = "Customer_TimeTable";
+}
+
+<h1>Customer_TimeTable</h1>
+
+
+<br />
+<br />
+<br />
+
+
+<h2> EditIsWorkRangeOfDays</h2>
+<form method="post" asp-action="EditIsWorkRangeOfDays" asp-controller="Type2">
+    <input type="hidden" name="Id_Timetable" value="@ViewBag.Id_Timetable" />
+    <input type="checkbox" name="IsWork" value="true" title="Czy te dni mają być robocze">
+    <input type="date" name="DayStart" value="" />
+    <input type="date" name="DayEnd" value="" />
+
+    
+
+
+    <button type="submit">Zmień dzień na nie-roboczy</button>
+</form>
+
+
+
+
+<br />
+<br />
+<br />
+<br />
+
+
+<h2> EditIsWorkTypeDay</h2>
+
+<form method ="post" asp-action="EditIsWorkTypeDay" asp-controller="Type2">
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" name="Id_Timetable" value="@ViewBag.Id_Timetable" />
+
+    <label for="DaysEdit">Wybierz dni:</label>
+    <select name="DaysEdit" multiple>
+        <option value="Monday">Poniedziałek</option>
+        <option value="Tuesday">Wtorek</option>
+        <option value="Wednesday">Środa</option>
+        <option value="Thursday">Czwartek</option>
+        <option value="Friday">Piątek</option>
+        <option value="Saturday">Sobota</option>
+        <option value="Sunday">Niedziela</option>
+    </select>
+
+    <br />
+
+    <label for="IsWork">Czy jest dniem pracującym?</label>
+    <input type="checkbox" name="IsWork" value="true" />
+
+    <br />
+
+    <button type="submit">Zmień dzień na nie-roboczy</button>
+</form>
+
+
+
+
+
+
+
+
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+<h2> EditTimeWorkAll</h2>
+
+<form method="post" asp-action="EditTimeWorkAll" asp-controller="Type2">
+
+    <input type="hidden" name="Id_Timetable" value="@ViewBag.Id_Timetable" />
+
+    <label for="start">Godzina rozpoczęcia pracy:</label>
+    <input type="time" name="start" />
+
+    <br />
+
+    <label for="end">Godzina zakończenia pracy:</label>
+    <input type="time" name="end" />
+
+    <br />
+
+    <button type="submit">Zapisz</button>
+</form>
+
+
+
+<br />
+<br />
+<br />
+<br />
+<br />
+
+
+
+
+<h2> EditTimeWorkRangeOfDays</h2>
+
+<form method="post" asp-action="EditTimeWorkRangeOfDays" asp-controller="Type2">
+
+    <input type="hidden" name="Id_Timetable" value="@ViewBag.Id_Timetable" />
+
+
+
+    <input type="date" name="DayStart" value="" />
+    <input type="date" name="DayEnd" value="" />
+
+
+
+
+    <label for="start">Godzina rozpoczęcia pracy:</label>
+    <input type="time" name="start" />
+
+    <br />
+
+    <label for="end">Godzina zakończenia pracy:</label>
+    <input type="time" name="end" />
+
+    <br />
+
+    <button type="submit">Zapisz</button>
+</form>
+
+
+
+<br />
+<br />
+<br />
+<br />
+<br />
+
+
+<h2> EditTimeWorkTypeDay</h2>
+
+<form method="post" asp-action="EditTimeWorkTypeDay" asp-controller="Type2">
+
+    <input type="hidden" name="Id_Timetable" value="@ViewBag.Id_Timetable" />
+    <label for="DaysEdit">Wybierz dni:</label>
+    <select name="DaysEdit" multiple>
+        <option value="Monday">Poniedziałek</option>
+        <option value="Tuesday">Wtorek</option>
+        <option value="Wednesday">Środa</option>
+        <option value="Thursday">Czwartek</option>
+        <option value="Friday">Piątek</option>
+        <option value="Saturday">Sobota</option>
+        <option value="Sunday">Niedziela</option>
+    </select>
+
+    <br />
+
+
+    <label for="start">Godzina rozpoczęcia pracy:</label>
+    <input type="time" name="start" />
+
+    <br />
+
+    <label for="end">Godzina zakończenia pracy:</label>
+    <input type="time" name="end" />
+
+    <br />
+
+    <button type="submit">Zapisz</button>
+</form>
+
+
+
+<br />
+<br />
+<br />
+<br />
+<br />
+
+
+
+
+
+
+
+
+
+
+
+@foreach (var timetable in Model)
+{
+    <div>
+        Day: @timetable.Timetable_Day                   <br />
+        Timetable ID: @timetable.Id_Timetable           <br />
+        Is Work: @(timetable.IsWork ? "Yes" : "No")       <br />
+        Date: @timetable.Date.ToString("yyyy-MM-dd")    <br />
+        Time Start: @timetable.TimeStart                <br />
+        Time End: @timetable.TimeEnd                    <br />
+    </div>
+
+            @if(timetable.IsWork == true)
+            {
+                <form method="post" asp-action="EditIsWorkSingleDay" asp-controller="Type2">
+                <input type="hidden" name="Timetable_Day" value="@timetable.Timetable_Day" />
+
+                    <button type="submit">Zmień dzień na nie-roboczy</button>
+                </form>
+            }
+            else
+            {
+                <form method="post" asp-action="EditIsWorkSingleDay" asp-controller="Type2">
+                <input type="hidden" name="Timetable_Day" value="@timetable.Timetable_Day" />
+
+                    <button type="submit">Zmień dzień na roboczy</button>
+                </form>
+            }
+            <br />
+
+
+            <form method="post" asp-action="EditTimeWorkSingleDay" asp-controller="Type2">
+                <label for="Timetable_Day">Dzień:</label>
+                <input type="hidden" name="Timetable_Day" value="@timetable.Timetable_Day" />
+
+
+                <label for="startTime">Czas rozpoczęcia:</label>
+                <input type="time" id="startTime" name="start" value=@timetable.TimeStart required>
+
+                <br>
+
+                <label for="endTime">Czas zakończenia:</label>
+                <input type="time" id="endTime" name="end" value=@timetable.TimeEnd required>
+
+                <br>
+
+                <button type="submit">Zmień czas pracy</button>
+            </form>
+    <br />
+    <br />
+    <br />
+
+}

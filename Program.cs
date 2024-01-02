@@ -73,6 +73,9 @@ builder.Services.AddSingleton<IEmailSender, EmailSender>();
 builder.Services.AddScoped<ISubsServices, SubsServices>();
 builder.Services.AddScoped<IOpinionServices, OpinionServices>();
 builder.Services.AddScoped<ICustomer_TimeTableServices, Customer_TimeTableServices>();
+builder.Services.AddScoped<IDay_CustomerServicesFirstGenerate, Day_CustomerServices>();
+builder.Services.AddScoped<IDay_Customer_EditServices, Day_CustomerServices>();
+builder.Services.AddScoped<IDay_Term, Day_CustomerServices>();
 
 
 

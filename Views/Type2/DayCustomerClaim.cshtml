@@ -1,0 +1,358 @@
+﻿@model SchiftPlanner.ModelsForViews.DayCustomerTimetableAndClaimed
+@using System.Globalization
+@using SchiftPlanner.ModelsForViews
+@using SchiftPlanner.Models.Company.Type_2
+
+@{
+    ViewData["Title"] = "DayCustomerClaim";
+}
+
+
+<h1>DayCustomerClaim</h1>
+
+
+@{
+    MonthDays monthDays = new MonthDays();
+
+    int AddDay(DayOfWeek date)
+    {
+        switch (date)
+        {
+            case DayOfWeek.Monday:
+                return 0;
+                break;
+            case DayOfWeek.Tuesday:
+                return 1;
+                break;
+            case DayOfWeek.Wednesday:
+                return 2;
+                break;
+            case DayOfWeek.Thursday:
+                return 3;
+                break;
+            case DayOfWeek.Friday:
+                return 4;
+                break;
+            case DayOfWeek.Saturday:
+                return 5;
+                break;
+            case DayOfWeek.Sunday:
+                return 6;
+                break;
+            default:
+                return -1;
+                break;
+        }
+    }
+
+    int lastMonth = Model.days[0].Date.Month;
+    int dniTygodnia = 0;
+    int numer = 0;
+
+
+}
+
+
+
+<div style="display: flex; flex-wrap: wrap;">
+
+    @for (int i = 0; i < monthDays.DaysInWeek.Length; i++)
+    {
+        <div style="width: 11%; height: 80px; background-color: aquamarine; margin:1.5%">
+            @monthDays.DaysInWeek[i];
+        </div>
+    }
+
+    @for (int i = 0; i < AddDay(Model.days[0].Date.DayOfWeek); i++)
+    {
+        <div style="width: 11%; height: 400px; background-color: aquamarine; margin:1.5%">
+
+        </div>
+    }
+
+    @if (Model.days[0].IsWork)
+    {
+        <div style="width: 11%; height: 400px; background-color: aquamarine; margin:1.5%">
+            Data: @Model.days[0].Date
+
+            <button type="button" onclick="showEditForm('ClaimOpinionForm0')">Zajmij termin pokaż</button>
+
+            <form id="ClaimOpinionForm0" method="post" asp-action="ClaimTerm" asp-controller="Type2" style="display: none">
+
+                <input type="hidden" name="Id_Timetable" value="@Model.days[0].Id_Timetable" />
+                <input type="hidden" name="Timetable_Day" value="@Model.days[0].Timetable_Day" />
+                <input type="hidden" name="dateTime" value="@Model.days[0].Date" />
+
+                <br />
+
+                <label for="TimeStart">Godzina rozpoczęcia:</label>
+                <input type="time" name="TimeStart" />
+
+                <br />
+
+                <label for="TimeEnd">Godzina zakończenia:</label>
+                <input type="time" name="TimeEnd" />
+
+                <br />
+
+                <button type="submit">Zajmij termin</button>
+            </form>
+
+
+            
+            <div class="allday">
+                <div class="startday">
+                    @Model.days[0].TimeStart
+                </div>
+
+                @{
+                    List<Day_Customer_Claimed> _daysClaimed = Model.daysClaimed.Where(s => s.Date == Model.days[0].Date).ToList();
+                    int hours = (Model.days[0].TimeEnd - Model.days[0].TimeStart).Hours;
+                }
+
+                @for (int k = 0; k < _daysClaimed.Count; k++)
+                {
+                    <!--
+                    float he = 100 * ((float)(_daysClaimed[k].TimeEnd - _daysClaimed[k].TimeStart).TotalHours / hours);
+
+                    <div class="dayclaimedelement" width="100%" ; height="he%" style="background-color: mintcream">
+                        _daysClaimed[k].TimeStart - _daysClaimed[k].TimeEnd
+                    </div>
+                    -->
+                    string formforedit = "ClaimOpinionForm0" + k.ToString();
+
+
+                    <div>
+                        @_daysClaimed[k].TimeStart - @_daysClaimed[k].TimeEnd
+                        <button type="button" onclick="showEditForm('@formforedit')" style="display: block">E</button>
+
+                        <form id="@formforedit" method="post" asp-action="UpdateTerm" asp-controller="Type2" style="display: none">
+
+                            <input type="hidden" name="Id_Timetable" value="@Model.days[0].Id_Timetable" />
+                            <input type="hidden" name="Timetable_Day" value="@Model.days[0].Timetable_Day" />
+                            <input type="hidden" name="dateTime" value="@Model.days[0].Date" />
+                            <input type="hidden" name="Timetable_Day_User" value="@_daysClaimed[k].Timetable_Day_User" />
+
+
+                            <br />
+
+                            <label for="TimeStart">Godzina rozpoczęcia:</label>
+                            <input type="time" name="TimeStart" value="@_daysClaimed[k].TimeStart" />
+
+                            <br />
+
+                            <label for="TimeEnd">Godzina zakończenia:</label>
+                            <input type="time" name="TimeEnd" value="@_daysClaimed[k].TimeEnd" />
+
+                            <br />
+
+                            <button type="submit">Edytuj termin</button>
+                        </form>
+
+
+
+
+
+                        <form id="@formforedit" method="post" asp-action="DeleteTerm" asp-controller="Type2">
+                            <input type="hidden" name="Timetable_Day_User" value="@_daysClaimed[k].Timetable_Day_User" />
+
+                            <button type="submit">Delete</button>
+                        </form>
+                    </div>
+                }
+
+                <div class="endday">
+                    @Model.days[0].TimeEnd
+                </div>
+            </div>
+            
+
+            
+
+        </div>
+    }
+    else
+    {
+        <div style="width: 11%; height: 400px; background-color: red; margin:1.5%">
+            Data: @Model.days[0].Date
+        </div>
+    }
+
+
+    @for (int i = 1; i < @Model.days.Count; i++)
+    {
+
+        if (lastMonth != Model.days[i].Date.Month)
+        {
+            lastMonth = Model.days[i].Date.Month;
+            <div style="width: 100%; height: 100px">
+            </div>
+
+            @for (int j = 0; j < AddDay(Model.days[i].Date.DayOfWeek); j++)
+            {
+                <div style="width: 11%; height: 400px; background-color: aquamarine; margin:1.5%">
+                </div>
+            }
+
+
+        }
+
+        @if (Model.days[i].IsWork)
+        {
+            <div style="width: 11%; height: 400px; background-color: aquamarine; margin:1.5%">
+                Data: @Model.days[i].Date
+
+                @{
+                    string s = "ClaimOpinionForm" + i.ToString();
+                 }
+
+                <button type="button" onclick="showEditForm('@s')">Zajmij termin pokaż</button>
+
+
+                <form id="@s" method="post" asp-action="ClaimTerm" asp-controller="Type2" style="display: none">
+
+                    <input type="hidden" name="Id_Timetable" value="@Model.days[i].Id_Timetable" />
+                    <input type="hidden" name="Timetable_Day" value="@Model.days[i].Timetable_Day" />
+                    <input type="hidden" name="dateTime" value="@Model.days[i].Date" />
+
+                    <br />
+
+                    <label for="TimeStart">Godzina rozpoczęcia:</label>
+                    <input type="time" name="TimeStart" />
+
+                    <br />
+
+                    <label for="TimeEnd">Godzina zakończenia:</label>
+                    <input type="time" name="TimeEnd" />
+
+                    <br />
+
+                    <button type="submit">Zajmij termin</button>
+                </form>
+
+
+                <div class="allday">
+                    <div class="startday">
+                        @Model.days[i].TimeStart
+                    </div>
+
+                    @{
+                        List<Day_Customer_Claimed> _daysClaimed = Model.daysClaimed.Where(s => s.Date == Model.days[i].Date).ToList();
+                        int hours = (Model.days[i].TimeEnd - Model.days[i].TimeStart).Hours;
+                    }
+
+                    @for (int k = 0; k < _daysClaimed.Count; k++)
+                    {
+                        <!--
+                        float he = 100 * ((float)(_daysClaimed[k].TimeEnd - _daysClaimed[k].TimeStart).TotalHours / hours);
+
+                        <div class="dayclaimedelement" width="100%" ; height="he%" style="background-color: mintcream">
+                            _daysClaimed[k].TimeStart - _daysClaimed[k].TimeEnd
+                        </div>
+                        -->
+                        string formforedit = "ClaimOpinionForm" + i.ToString() + k.ToString();
+
+
+                        <div>
+                            @_daysClaimed[k].TimeStart - @_daysClaimed[k].TimeEnd
+                            <button type="button" onclick="showEditForm('@formforedit')" style="display: block">E</button>
+
+                            <form id="@formforedit" method="post" asp-action="UpdateTerm" asp-controller="Type2" style="display: none">
+
+                                <input type="hidden" name="Id_Timetable" value="@Model.days[i].Id_Timetable" />
+                                <input type="hidden" name="Timetable_Day" value="@Model.days[i].Timetable_Day" />
+                                <input type="hidden" name="dateTime" value="@Model.days[i].Date" />
+                                <input type="hidden" name="Timetable_Day_User" value="@_daysClaimed[k].Timetable_Day_User" />
+                                
+
+                                <br />
+
+                                <label for="TimeStart">Godzina rozpoczęcia:</label>
+                                <input type="time" name="TimeStart" value="@_daysClaimed[k].TimeStart" />
+
+                                <br />
+
+                                <label for="TimeEnd">Godzina zakończenia:</label>
+                                <input type="time" name="TimeEnd" value="@_daysClaimed[k].TimeEnd" />
+
+                                <br />
+
+                                <button type="submit">Edytuj termin</button>
+                            </form>
+
+
+
+                            <form id="@formforedit" method="post" asp-action="DeleteTerm" asp-controller="Type2">
+                                <input type="hidden" name="Timetable_Day_User" value="@_daysClaimed[k].Timetable_Day_User" />
+
+                                <button type="submit">Delete</button>
+                            </form>
+
+                        </div>
+                    }
+
+                    <div class="endday">
+                        @Model.days[i].TimeEnd
+                    </div>
+                </div>
+
+
+
+
+            </div>
+
+
+
+
+
+
+        } 
+        else
+        {
+            <div style="width: 11%; height: 400px; background-color: red; margin:1.5%">
+                Data: @Model.days[i].Date
+            </div>
+        }
+
+
+        numer++;
+
+        if(numer == 7)
+        {
+            <div> </div>
+        }
+
+
+    }
+
+
+
+
+</div>
+
+
+
+
+
+
+
+<script>
+    function showEditForm(iddd) {
+        var editForm = document.getElementById(iddd);
+
+        var currentDisplay = editForm.style.display;
+
+        editForm.style.display = (currentDisplay === "block") ? "none" : "block";
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+
