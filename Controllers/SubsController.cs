@@ -85,11 +85,11 @@ namespace SchiftPlanner.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> ManageSub(string Id_Sub)
+        public async Task<IActionResult> ManageSub(int Id_Company)
         {
-            Subscriptions subscription = _context.Subscriptions.FirstOrDefault(s => s.Id_Sub == Id_Sub);
+            Subscriptions subscription = _context.Subscriptions.FirstOrDefault(s => s.Id_Company == Id_Company);
 
-            Type_Subscriptions type_Subscriptions = _context.Type_Subscriptions.FirstOrDefault(s => s.Id_Sub == Id_Sub);
+            Type_Subscriptions type_Subscriptions = _context.Type_Subscriptions.FirstOrDefault(s => s.Id_Sub == subscription.Id_Sub);
 
             ViewBag.CompanyType = type_Subscriptions.TypeCompany;
 
@@ -107,9 +107,9 @@ namespace SchiftPlanner.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> ChangeAutoRenew(string Id_Sub)
+        public async Task<IActionResult> ChangeAutoRenew(int Id_Company)
         {
-            Subscriptions UpdateSubscriptions = _context.Subscriptions.FirstOrDefault(s => s.Id_Sub == Id_Sub);
+            Subscriptions UpdateSubscriptions = _context.Subscriptions.FirstOrDefault(s => s.Id_Company == Id_Company);
 
 
             if (UpdateSubscriptions.AutoRenew == true)
@@ -123,16 +123,16 @@ namespace SchiftPlanner.Controllers
 
             _context.SaveChanges();
             
-            return await ManageSub(Id_Sub);
+            return await ManageSub(Id_Company);
         }
 
 
 
         [HttpPost]
-        public async Task<IActionResult> CancelSubscription(string Id_Sub)
+        public async Task<IActionResult> CancelSubscription(int Id_Company)
         {
 
-            Subscriptions UpdateSubscriptions = _context.Subscriptions.FirstOrDefault(s => s.Id_Sub == Id_Sub);
+            Subscriptions UpdateSubscriptions = _context.Subscriptions.FirstOrDefault(s => s.Id_Company == Id_Company);
 
             if (UpdateSubscriptions.AutoRenew == true)
             {
@@ -142,7 +142,7 @@ namespace SchiftPlanner.Controllers
 
             _context.SaveChanges();
 
-            return await ManageSub(Id_Sub);
+            return await ManageSub(Id_Company);
         }
 
 
