@@ -103,40 +103,23 @@ namespace SchiftPlanner.Services
 
 
 
-
-
-
-
-
-
-
-
-
-        /*
-        public async Task<bool> IsTermAvailable(string? Timetable_Day_User, DateTime dateTime, TimeSpan TimeStart, TimeSpan TimeEnd, ushort Break)
+        public async Task<bool> StartEndCheck(string Timetable_Day, TimeSpan TimeStart, TimeSpan TimeEnd)
         {
-            bool isAvailable;
-
-
-            if (Timetable_Day_User != null)
+            Day_Customer_Timetable day_Customer_ = _context.Day_Customer_Timetable.Find(Timetable_Day);
+            if(TimeStart >= day_Customer_.TimeStart && TimeStart <= day_Customer_.TimeEnd && TimeEnd >= day_Customer_.TimeStart && TimeEnd <= day_Customer_.TimeEnd && TimeEnd > TimeStart) 
             {
-                 isAvailable = !_context.Day_Customer_Claimed.Any(dc =>
-                    dc.Date == dateTime &&
-                    !((dc.TimeEnd <= TimeStart) || (dc.TimeStart >= TimeEnd)));
-            }
-            else
-            {
-                 isAvailable = !_context.Day_Customer_Claimed.Any(dc =>
-                    dc.Timetable_Day_User != Timetable_Day_User && 
-                    dc.Date == dateTime &&
-                    ((dc.TimeStart >= TimeStart && dc.TimeStart < TimeEnd) ||
-                    (dc.TimeEnd > TimeStart && dc.TimeEnd <= TimeEnd) ||
-                    (dc.TimeStart <= TimeStart && dc.TimeEnd >= TimeEnd)));
+                return true;
             }
 
-            return isAvailable;
+            return false;
         }
-        */
+
+
+
+
+
+
+
 
 
 
@@ -144,8 +127,9 @@ namespace SchiftPlanner.Services
         {
             Customer_Timetable customer_ = _context.Customer_Timetable.Where(s => s.Id_Timetable == Id_Timetable).First();
             bool isAvailable = await IsTermChecked(null, dateTime, TimeStart, TimeEnd, customer_.Break_after_Client, Id_Timetable);
+            bool startendcheck = await StartEndCheck(Timetable_Day, TimeStart, TimeEnd);
 
-            if (isAvailable)
+            if (isAvailable && startendcheck)
             {
                 var day_Customer = new Day_Customer_Claimed
                 {
@@ -169,8 +153,9 @@ namespace SchiftPlanner.Services
         {
             Customer_Timetable customer_ = _context.Customer_Timetable.Where(s => s.Id_Timetable == Id_Timetable).First();
             bool isAvailable = await IsTermChecked(Timetable_Day_User, dateTime, TimeStart, TimeEnd, customer_.Break_after_Client, Id_Timetable);
+            bool startendcheck = await StartEndCheck(Timetable_Day, TimeStart, TimeEnd);
 
-            if (isAvailable)
+            if (isAvailable && startendcheck)
             {
                 Day_Customer_Claimed _claimed = _context.Day_Customer_Claimed.Find(Timetable_Day_User);
 

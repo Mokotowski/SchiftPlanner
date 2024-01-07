@@ -144,13 +144,5 @@ namespace SchiftPlanner.Controllers
 
             return await ManageSub(Id_Company);
         }
-
-
-
-
-
-
-
-
     }
 }

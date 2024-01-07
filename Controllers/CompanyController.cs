@@ -10,6 +10,8 @@ using System.Drawing;
 using System.Globalization;
 using System.Text.Encodings.Web;
 using QRCoder;
+using System.Runtime.CompilerServices;
+using SchiftPlanner.Models.Subs;
 
 
 
@@ -62,49 +64,94 @@ namespace SchiftPlanner.Controllers
 
 
 
+
+
+        public async Task<bool> IsAuth(int Id_Comapny, UserModel user)
+        {
+            Subscriptions? subscription = _context.Subscriptions.Find(Id_Comapny);
+           
+            if(subscription.Id_User == user.Id && subscription != null)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+
+
+
+
+
+
         [HttpGet]
         public async Task<IActionResult> ManageCompanyInfo(int Id_Company)
         {
-            // ssprawdzenie czy jest się ownerem
-            CompanyInfo companyInfo = _context.CompanyInfo.FirstOrDefault(s => s.Id_Company == Id_Company);
+            bool auth = await IsAuth(Id_Company, await _userManager.GetUserAsync(User));
 
+            if(auth) 
+            {
+                CompanyInfo companyInfo = _context.CompanyInfo.FirstOrDefault(s => s.Id_Company == Id_Company);
 
-
-            return View(companyInfo);
+                return View(companyInfo);
+            }
+            else
+            {
+                return RedirectToAction("NotAuthorized", "Home");
+            }
         }
 
         [HttpGet]
-        public IActionResult GetQrCodeForCompanySite(int Id_Company)
+        public async Task<IActionResult> GetQrCodeForCompanySite(int Id_Company)
         {
-            QRCodeGenerator qrGenerator = new QRCodeGenerator();
-            QRCodeData qrCodeData = qrGenerator.CreateQrCode($"https://localhost:7014/Company/CompanyInfo/{Id_Company}", QRCodeGenerator.ECCLevel.Q);
+            bool auth = await IsAuth(Id_Company, await _userManager.GetUserAsync(User));
 
-            using (QRCode qrCode = new QRCode(qrCodeData))
+            if (auth)
             {
-                Bitmap qrCodeImage = qrCode.GetGraphic(20);
+                QRCodeGenerator qrGenerator = new QRCodeGenerator();
+                QRCodeData qrCodeData = qrGenerator.CreateQrCode($"https://localhost:7014/Company/CompanyInfo/{Id_Company}", QRCodeGenerator.ECCLevel.Q);
 
-                using (MemoryStream stream = new MemoryStream())
+                using (QRCode qrCode = new QRCode(qrCodeData))
                 {
-                    qrCodeImage.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
-                    byte[] qrCodeBytes = stream.ToArray();
+                    Bitmap qrCodeImage = qrCode.GetGraphic(20);
 
-                    return File(qrCodeBytes, "image/png");
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        qrCodeImage.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                        byte[] qrCodeBytes = stream.ToArray();
+
+                        return File(qrCodeBytes, "image/png");
+                    }
                 }
+            }
+            else
+            {
+                return RedirectToAction("NotAuthorized", "Home");
             }
         }
 
 
 
         [HttpPost]
-        public async Task SaveCompanyInfo(int Id_Company, string CompanyName, string Description, string LogoUrl)
+        public async Task<IActionResult> SaveCompanyInfo(int Id_Company, string CompanyName, string Description, string LogoUrl)
         {
-            // ssprawdzenie czy jest się ownerem
-            CompanyInfo companyInfo = _context.CompanyInfo.FirstOrDefault(s => s.Id_Company == Id_Company);
-            companyInfo.CompanyName = CompanyName;
-            companyInfo.Description = Description;
-            companyInfo.LogoUrl = LogoUrl;
+            bool auth = await IsAuth(Id_Company, await _userManager.GetUserAsync(User));
 
-            _context.SaveChanges();  
+            if (auth)
+            {
+                CompanyInfo companyInfo = _context.CompanyInfo.Find(Id_Company);
+                companyInfo.CompanyName = CompanyName;
+                companyInfo.Description = Description;
+                companyInfo.LogoUrl = LogoUrl;
+
+                _context.SaveChanges();
+
+                return await CompanyInfo(Id_Company);
+            }
+            else
+            {
+                return RedirectToAction("NotAuthorized", "Home");
+            }  
         }
 
 
@@ -115,13 +162,21 @@ namespace SchiftPlanner.Controllers
 
 
         [HttpGet]
-        public IActionResult ManageOpinions(int Id_Company)
+        public async Task<IActionResult> ManageOpinions(int Id_Company)
         {
-            // LOGIKA pobierająca opinie dla firmy i ssprawdzenie czy jest się ownerem
+            bool auth = await IsAuth(Id_Company, await _userManager.GetUserAsync(User));
 
-            List<Opinions> opinions = _context.Opinions.Where(c => c.Id_Company == Id_Company).ToList();
+            if (auth)
+            {
+                List<Opinions> opinions = _context.Opinions.Where(c => c.Id_Company == Id_Company).ToList();
 
-            return View(opinions);
+                return View(opinions);
+            }
+            else
+            {
+                return RedirectToAction("NotAuthorized", "Home");
+            }
+
         }
 
 
@@ -129,7 +184,7 @@ namespace SchiftPlanner.Controllers
 
 
 
-
+        //Zabezpieczyć czy zmieniamy własny komentarz czy usuwamy własny komentarz lub komentarz do naszej firmy
         [HttpPost]
         public async Task AddOpinion(int Id_Company, bool IsAnonymously, int OpinionScore, string OpinionText)
         {

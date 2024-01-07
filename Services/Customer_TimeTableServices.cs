@@ -72,10 +72,10 @@ namespace SchiftPlanner.Services
             {
                 Customer_Timetable customer_Timetable = _context.Customer_Timetable.Where(c => c.Id_Timetable == Id_Timetable).FirstOrDefault();
                 
-            customer_Timetable.Break_after_Client = Break_after_Client;
-            customer_Timetable.Column = Column;
-            customer_Timetable.Simultant = Simultant;
-            _context.SaveChanges();
+                customer_Timetable.Break_after_Client = Break_after_Client;
+                customer_Timetable.Column = Column;
+                customer_Timetable.Simultant = Simultant;
+                _context.SaveChanges();
             }
 
         }
