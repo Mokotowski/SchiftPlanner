@@ -91,14 +91,14 @@ else if (ViewBag.CompanyType == 2)
 @if(Model.AutoRenew)
 {
              <form method="post" asp-action="ChangeAutoRenew" asp-controller="Subs">
-            <input type="hidden" id="Id_Sub1" name="Id_Sub" value="@Model.Id_Sub" />
+        <input type="hidden" name="Id_Company" value="@Model.Id_Sub" />
             <button type="submit">Wyłącz odnawianie</button>
         </form>
 }
 else
 {
     <form method="post" asp-action="ChangeAutoRenew" asp-controller="Subs">
-        <input type="hidden" id="Id_Sub2" name="Id_Sub" value="@Model.Id_Sub" />
+        <input type="hidden" name="Id_Company" value="@Model.Id_Sub" />
         <button type="submit">Włącz odnawianie</button>
     </form>
 }
@@ -115,7 +115,7 @@ else
 
 
      <form method="post" asp-action="CancelSubscription" asp-controller="Subs">
-        <input type="hidden" id="Id_Sub3" name="Id_Sub" value="@Model.Id_Sub" />
+    <input type="hidden" name="Id_Company" value="@Model.Id_Sub" />
         <button type="submit">Anuluj subskrypcje</button>
     </form>
 

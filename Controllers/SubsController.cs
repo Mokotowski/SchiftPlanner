@@ -84,16 +84,40 @@ namespace SchiftPlanner.Controllers
         }
 
 
+        public async Task<bool> IsAuth(int Id_Comapny, UserModel user)
+        {
+            Subscriptions? subscription = _context.Subscriptions.Find(Id_Comapny);
+
+            if (subscription != null) 
+            {
+                if (subscription.Id_User == user.Id)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+
+
         [HttpGet]
         public async Task<IActionResult> ManageSub(int Id_Company)
         {
-            Subscriptions subscription = _context.Subscriptions.FirstOrDefault(s => s.Id_Company == Id_Company);
+            bool auth = await IsAuth(Id_Company, await _userManager.GetUserAsync(User));
 
-            Type_Subscriptions type_Subscriptions = _context.Type_Subscriptions.FirstOrDefault(s => s.Id_Sub == subscription.Id_Sub);
+            if (auth) 
+            {
+                Subscriptions subscription = _context.Subscriptions.Find(Id_Company);
 
-            ViewBag.CompanyType = type_Subscriptions.TypeCompany;
+                Type_Subscriptions type_Subscriptions = _context.Type_Subscriptions.Find(subscription.Id_Sub);
 
-            return View(subscription);
+                ViewBag.CompanyType = type_Subscriptions.TypeCompany;
+
+                return View(subscription);
+            }
+
+            return RedirectToAction("NotAuthorized", "Home");
         }
 
 
@@ -109,21 +133,27 @@ namespace SchiftPlanner.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangeAutoRenew(int Id_Company)
         {
-            Subscriptions UpdateSubscriptions = _context.Subscriptions.FirstOrDefault(s => s.Id_Company == Id_Company);
+            bool auth = await IsAuth(Id_Company, await _userManager.GetUserAsync(User));
 
-
-            if (UpdateSubscriptions.AutoRenew == true)
+            if (auth)
             {
-                UpdateSubscriptions.AutoRenew = false;
-            }
-            else
-            {
-                UpdateSubscriptions.AutoRenew = true;
+                Subscriptions UpdateSubscriptions = _context.Subscriptions.Find(Id_Company);
+
+                if (UpdateSubscriptions.AutoRenew == true)
+                {
+                    UpdateSubscriptions.AutoRenew = false;
+                }
+                else
+                {
+                    UpdateSubscriptions.AutoRenew = true;
+                }
+
+                _context.SaveChanges();
+
+                return RedirectToAction("ManageSub", new { Id_Company = Id_Company });
             }
 
-            _context.SaveChanges();
-            
-            return await ManageSub(Id_Company);
+            return RedirectToAction("NotAuthorized", "Home");
         }
 
 
@@ -131,18 +161,23 @@ namespace SchiftPlanner.Controllers
         [HttpPost]
         public async Task<IActionResult> CancelSubscription(int Id_Company)
         {
+            bool auth = await IsAuth(Id_Company, await _userManager.GetUserAsync(User));
 
-            Subscriptions UpdateSubscriptions = _context.Subscriptions.FirstOrDefault(s => s.Id_Company == Id_Company);
-
-            if (UpdateSubscriptions.AutoRenew == true)
+            if (auth)
             {
-                UpdateSubscriptions.AutoRenew = false;
+                Subscriptions UpdateSubscriptions = _context.Subscriptions.Find(Id_Company);
+
+                if (UpdateSubscriptions.AutoRenew == true)
+                {
+                    UpdateSubscriptions.AutoRenew = false;
+                }
+
+                _context.SaveChanges();
+
+                return RedirectToAction("ManageSub", new { Id_Company = Id_Company });
             }
 
-
-            _context.SaveChanges();
-
-            return await ManageSub(Id_Company);
+            return RedirectToAction("NotAuthorized", "Home");
         }
     }
 }

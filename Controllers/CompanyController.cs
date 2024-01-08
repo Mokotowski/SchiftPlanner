@@ -70,9 +70,12 @@ namespace SchiftPlanner.Controllers
         {
             Subscriptions? subscription = _context.Subscriptions.Find(Id_Comapny);
            
-            if(subscription.Id_User == user.Id && subscription != null)
+            if(subscription != null) 
             {
-                return true;
+                if (subscription.Id_User == user.Id)
+                {
+                    return true;
+                }
             }
 
             return false;
@@ -146,7 +149,7 @@ namespace SchiftPlanner.Controllers
 
                 _context.SaveChanges();
 
-                return await CompanyInfo(Id_Company);
+                return RedirectToAction("CompanyInfo", new { Id_Company = Id_Company });
             }
             else
             {
@@ -184,23 +187,53 @@ namespace SchiftPlanner.Controllers
 
 
 
-        //Zabezpieczyć czy zmieniamy własny komentarz czy usuwamy własny komentarz lub komentarz do naszej firmy
         [HttpPost]
-        public async Task AddOpinion(int Id_Company, bool IsAnonymously, int OpinionScore, string OpinionText)
+        public async Task<IActionResult> AddOpinion(int Id_Company, bool IsAnonymously, int OpinionScore, string OpinionText)
         {
             _opinionServices.AddOpinions(Id_Company, IsAnonymously, OpinionScore, OpinionText, await _userManager.GetUserAsync(User));
+
+            return RedirectToAction("CompanyInfo", new { Id_Company = Id_Company });
         }
 
         [HttpPost]
-        public async Task DeleteOpinion(int Id)
+        public async Task<IActionResult> DeleteOpinion(int Id)
         {
-            _opinionServices.DeleteOpinions(Id);
+            Opinions? opinion = _context.Opinions.Find(Id);
+            Subscriptions sub = _context.Subscriptions.Find(opinion.Id_Company);
+            UserModel user = await _userManager.GetUserAsync(User);
+
+            if (opinion != null && sub != null) 
+            {
+                if (user.Id == opinion.Id_user)
+                {
+                    _opinionServices.DeleteOpinions(Id);
+
+                    return RedirectToAction("CompanyInfo", new { Id_Company = opinion.Id_Company });
+                }
+                if (user.Id == sub.Id_User)
+                {
+                    _opinionServices.DeleteOpinions(Id);
+
+                    return RedirectToAction("ManageOpinions", new { Id_Company = opinion.Id_Company });
+                }
+            }
+
+            return RedirectToAction("NotAuthorized", "Home");
         }
 
         [HttpPost]
-        public async Task EditOpinion(int Id, bool IsAnonymously, int OpinionScore, string OpinionText)
+        public async Task<IActionResult> EditOpinion(int Id, bool IsAnonymously, int OpinionScore, string OpinionText)
         {
-            _opinionServices.EditOpinions(Id, IsAnonymously, OpinionScore, OpinionText);
+            Opinions? opinion = _context.Opinions.Find(Id);
+            UserModel user = await _userManager.GetUserAsync(User);
+
+            if (opinion.Id_user == user.Id && opinion != null)
+            {
+                _opinionServices.EditOpinions(Id, IsAnonymously, OpinionScore, OpinionText);
+                return RedirectToAction("CompanyInfo", new { Id_Company = opinion.Id_Company });
+            }
+
+            return RedirectToAction("NotAuthorized", "Home");
         }
     }
 }
