@@ -1,0 +1,84 @@
+﻿@model List<SchiftPlanner.Models.Company.Type_1.Workers>
+@using SchiftPlanner.Models.Company.Type_1;
+
+
+@{
+    ViewData["Title"] = "ManageWorkers";
+}
+
+
+<h1>ManageWorkers</h1>
+
+
+@{
+
+    List<Workers> manageable = Model.Where(p => p.Accepted == true).ToList();
+    List<Workers> requests = Model.Where(p => p.Accepted == false).ToList();
+
+
+
+}
+
+<h2> Requests </h2>
+
+
+
+<div>
+
+@foreach(Workers workerrequest in requests)
+{
+    UserModel user = await Task.Run(() => ((List<UserModel>)ViewBag.Users).Find(u => u.Id == workerrequest.Id_user));
+
+    <div>
+            <h4> @(user.UserName) - @(user.Email) </h4>
+
+            <form id="acceptWorker" method="post" asp-action="AcceptRequest" asp-controller="Type1">
+                <input type="hidden" name="Id_Work_Group" value="@workerrequest.Id_Work_Group" />
+                <input type="hidden" name="User_Id" value="@user.Id" />
+
+                <button type="submit">Accept</button>
+            </form>
+
+
+            <form id="rejectWorker" method="post" asp-action="RejectRequest" asp-controller="Type1">
+                <input type="hidden" name="Id_Work_Group" value="@workerrequest.Id_Work_Group" />
+                <input type="hidden" name="User_Id" value="@user.Id" />
+
+                <button type="submit">Reject</button>
+            </form>
+
+    </div>
+}
+
+</div>
+
+
+
+<h2> Co-Workers </h2>
+
+
+
+
+
+<div>
+
+    @foreach (Workers workeraccepted in manageable)
+    {
+        UserModel user = await Task.Run(() => ((List<UserModel>)ViewBag.Users).Find(u => u.Id == workeraccepted.Id_user));
+        <div>
+            <h4> @(user.UserName) - @(user.Email) </h4>
+
+            <form id="deleteWorker" method="post" asp-action="DeleteWorker" asp-controller="Type1">
+                <input type="hidden" name="Id_Work_Group" value="@workeraccepted.Id_Work_Group" />
+                <input type="hidden" name="User_Id" value="@user.Id" />
+
+                <button type="submit">Delete Worker</button>
+            </form>
+
+        </div>
+    }
+
+</div>
+
+
+

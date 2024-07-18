@@ -1,0 +1,91 @@
+﻿@model List<SchiftPlanner.Models.Company.Type_1.Worker_Timetable>
+
+
+@{
+    ViewData["Title"] = "ManageWorker_TimeTables";
+}
+
+<form method="post" asp-action="AddWorker_TimeTables" asp-controller="Type1">
+    <input type="hidden" name="Id_Company" value="@ViewBag.Id_Company" />
+
+    <button type="submit">Dodaj Plan pracowników</button>
+</form>
+
+<br />
+<br />
+<br />
+<br />
+
+
+
+<div>
+    @foreach (var timetable in Model)
+    {
+        <div>
+            <p>Id_Timetable: @timetable.Id_Timetable</p>
+            <p>Id_Company: @timetable.Id_Company</p>
+            <p>Column: @timetable.Column</p>
+            <p>Simultant: @timetable.Simultant</p>
+
+            <br />
+            <br />
+
+
+            <form method="get" asp-action="Worker_TimeTables" asp-controller="Type1">
+                <input type="hidden" name="Id_Timetable" value="@Model[0].Id_Timetable" />
+
+                <button type="submit">Zarządzaj dniami</button>
+            </form>
+
+            <br />
+
+            <form method="post" asp-action="DeleteWorker_TimeTables" asp-controller="Type1">
+                <input type="hidden" name="Id_Timetable" value="@timetable.Id_Timetable" />
+
+                <button type="submit">Usuń Plan pracowników</button>
+            </form>
+
+            <br />
+
+            <button type="button" onclick="showEditForm()">Edytuj Plan pracowników</button>
+
+            <form id="editOpinionForm" method="post" asp-action="EditWorker_TimeTables" asp-controller="Type1" style="display: none;">
+                <label for="Column">Column:</label>
+                <input type="number" name="Column" min="1" value=@(timetable.Column) required>
+                <br>
+
+                <label for="Simultant">Simultant:</label>
+                <input type="number" name="Simultant" min="1" value=@(timetable.Simultant) required>
+                <br>
+
+                <input type="hidden" name="Id_Timetable" value="@timetable.Id_Timetable" />
+
+                <br />
+                <br />
+
+                <button type="submit">Zapisz edycję opinii</button>
+            </form>
+
+
+            <br />
+            <br />
+        </div>
+    }
+</div>
+
+
+
+
+<script>
+    function showEditForm() {
+        var editForm = document.getElementById("editOpinionForm");
+
+        var currentDisplay = editForm.style.display;
+
+        editForm.style.display = (currentDisplay === "block") ? "none" : "block";
+    }
+</script>
+
+
+
+

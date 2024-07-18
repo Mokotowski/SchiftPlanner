@@ -6,27 +6,79 @@
 
 <h1>ManageSub</h1>
 
+    <form method="get" asp-action="CompanyInfo" asp-controller="Company">
+        <input type="hidden" id="Id_Company" name="Id_Company" value="@Model.Id_Company" />
+        <button type="submit">Pokaż strone firmy</button>
+    </form>
+
+<br />
+<br />
+<br />
+
+<form method="get" asp-action="ManageCompanyInfo" asp-controller="Company">
+    <input type="hidden" name="Id_Company" value="@Model.Id_Company" />
+    <button type="submit">Zarządzaj stroną firmy</button>
+</form>
+
+<br />
+<br />
+<br />
+
+@if (ViewBag.CompanyType == 2)
+{
+
+    <form method="get" asp-action="ManageOpinions" asp-controller="Company">
+        <input type="hidden" name="Id_Company" value="@Model.Id_Company" />
+        <button type="submit">Zarządzaj opiniami</button>
+    </form>
 
 
-@{
-    <div>
-        @Model.Id_Company
-        @Model.Id_User
-        @Model.Id_Sub
-        @Model.StartDate
-        @Model.EndDate
-        @Model.AutoRenew
+    <br />
+    <br />
+    <br />
+}
+else
+{
+    <form method="get" asp-action="ManageWorkers" asp-controller="Type1">
+        <input type="hidden" name="Id_Work_Group" value="@ViewBag.Company_Type1.Id_Work_Group" />
+        <button type="submit">Zarządzaj pracownikami</button>
+    </form>
 
+    <br />
+    <br />
+    <br />
 
-    
-    
-    </div>
 }
 
 
+
+
+<form method="get" asp-action="GetQrCodeForCompanySite" asp-controller="Company">
+    <input type="hidden" name="Id_Company" value="@Model.Id_Company" />
+    <button type="submit">Uzyskaj qrcode przekierowywujący na stronę firmy</button>
+</form>
+
 <br />
 <br />
 <br />
+
+@if (ViewBag.CompanyType == 1)
+{
+    <form method="get" asp-action="ManageWorker_TimeTables" asp-controller="Type1">
+        <input type="hidden" name="Id_Company" value="@Model.Id_Company" />
+        <button type="submit">Zarządzaj planami pracowników</button>
+    </form>
+}
+else if (ViewBag.CompanyType == 2)
+{
+    <form method="get" asp-action="ManageCustomer_TimeTables" asp-controller="Type2">
+        <input type="hidden" name="Id_Company" value="@Model.Id_Company" />
+        <button type="submit">Zarządzaj planami klientów</button>
+    </form>
+}
+
+
+
 <br />
 <br />
 <br />
@@ -34,15 +86,15 @@
 
 @if(Model.AutoRenew)
 {
-    <form method="post" asp-action="ChangeAutoRenew" asp-controller="Subs">
-        <input type="hidden" id="ChangeAutoRenewfalse" name="subscription" value="@Model" />
-        <button type="submit">Wyłącz odnawianie</button>
-    </form>
+             <form method="post" asp-action="ChangeAutoRenew" asp-controller="Subs">
+        <input type="hidden" name="Id_Company" value="@Model.Id_Sub" />
+            <button type="submit">Wyłącz odnawianie</button>
+        </form>
 }
 else
 {
     <form method="post" asp-action="ChangeAutoRenew" asp-controller="Subs">
-        <input type="hidden" id="ChangeAutoRenewtrue" name="subscription" value="@Model" />
+        <input type="hidden" name="Id_Company" value="@Model.Id_Sub" />
         <button type="submit">Włącz odnawianie</button>
     </form>
 }
@@ -57,7 +109,10 @@ else
 <br />
 <br />
 
-<form method="post" asp-action="CancelSubscription" asp-controller="Subs">
-    <input type="hidden" id="CancelSubscription" name="subscription" value="@Model" />
-    <button type="submit">Anuluj subskrypcje</button>
-</form>
+
+     <form method="post" asp-action="CancelSubscription" asp-controller="Subs">
+    <input type="hidden" name="Id_Company" value="@Model.Id_Sub" />
+        <button type="submit">Anuluj subskrypcje</button>
+    </form>
+
+

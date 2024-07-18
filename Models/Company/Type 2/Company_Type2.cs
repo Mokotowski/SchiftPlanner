@@ -8,7 +8,7 @@ namespace SchiftPlanner.Models.Company.Type_2
         public int Id_Company { get; set; }
         public string Id_user { get; set; }
 
-
+        public bool Accepted { get; set; }
 
 
         public CompanyInfo Company_Info { get; set; }

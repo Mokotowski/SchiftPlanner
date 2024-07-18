@@ -1,4 +1,5 @@
-﻿using SchiftPlanner.Models;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using SchiftPlanner.Models;
 using SchiftPlanner.Models.Company;
 using SchiftPlanner.Services.Interfaces;
 using System.Collections.Generic;
@@ -14,25 +15,30 @@ namespace SchiftPlanner.Services
             _context = context;
         }
 
-        public async Task<short> NoteCompany(CompanyInfo companyInfo)
+        public async Task<int> NoteCompany(CompanyInfo companyInfo)
         {
 
-            List<short> opinions = _context.Opinions.Where(c => c.Id_Company == companyInfo.Id_Company).Select(o => o.Score).ToList();
+            List<Opinions> opinions = _context.Opinions.Where(c => c.Id_Company == companyInfo.Id_Company).ToList();
 
-            long sum = 0;
-            foreach(var opinion in opinions)
+
+            try
             {
-                sum += opinion;
+                int sum = 0;
+                foreach (var opinion in opinions)
+                {
+                    sum += opinion.Score;
+                }
+                int average = (sum / opinions.Count);
+
+                return average;
+
             }
-            short average = (short)(sum / opinions.Count);
+            catch (Exception DivideByZeroException)
+            {
+                return -1;
+            }
 
-
-            return average;
         }
-
-
-
-
 
         public async Task<List<Opinions>> Opinions(CompanyInfo companyInfo)
         {
@@ -41,32 +47,46 @@ namespace SchiftPlanner.Services
         }
 
 
-        public async Task AddOpinions(CompanyInfo companyInfo, Opinions NewOpinion, UserModel userModel)
+
+
+
+
+        public async Task AddOpinions(int Id_Company, bool IsAnonymously, int OpinionScore, string OpinionText, UserModel userModel)
         {
-            NewOpinion.Id_user = userModel.Id;
-            NewOpinion.Id_Company = companyInfo.Id_Company;
+            if(_context.Opinions.Where(c => c.Id_Company == Id_Company && c.Id_user == userModel.Id).Count() == 0) 
+            {
+                Opinions NewOpinion = new Opinions();
 
-            _context.Opinions.Add(NewOpinion);
-            _context.SaveChanges();
+                NewOpinion.Id_Company = Id_Company;
+                NewOpinion.Anonymously = IsAnonymously;
+                NewOpinion.Id_user = userModel.Id;
+                NewOpinion.Score = OpinionScore;
+                NewOpinion.Text = OpinionText;
+                NewOpinion.DateAdd = DateTime.Now;
 
+               _context.Opinions.Add(NewOpinion);
+               _context.SaveChanges();
+
+            }
         }
 
 
-
-        public async Task DeleteOpinions(Opinions opinion)
+        public async Task DeleteOpinions(int Id)
         {
 
-            Opinions opinionTodelete = _context.Opinions.Where(c => c.Id == opinion.Id).FirstOrDefault();
+            Opinions opinionTodelete = _context.Opinions.Where(c => c.Id == Id).FirstOrDefault();
        
             _context.Opinions.RemoveRange(opinionTodelete);
             _context.SaveChanges();
 
         }
-        public async Task EditOpinions(Opinions ActualOpinion, Opinions NewOpinion)
+        public async Task EditOpinions(int Id, bool IsAnonymously, int OpinionScore, string OpinionText)
         {
+            Opinions opinion = _context.Opinions.Where(c => c.Id == Id).FirstOrDefault();
 
-            //sprawdzić czy działa
-            ActualOpinion = ActualOpinion / NewOpinion;
+            opinion.Text = OpinionText;
+            opinion.Anonymously = IsAnonymously;
+            opinion.Score = OpinionScore;
 
             _context.SaveChanges();
         }

@@ -1,17 +1,293 @@
-﻿@model SchiftPlanner.Models.Company.CompanyInfo
-
+﻿@model SchiftPlanner.ModelsForViews.ComapnyAndOpinions
+@using SchiftPlanner.Models.Company
+@using SchiftPlanner.Models.Company.Type_2
+@using SchiftPlanner.Models.Company.Type_1
 
 <header>
-    <h1>Welcome to @Model.CompanyName</h1>
-    <img src="@Model.LogoUrl" alt="Company Logo" />
+    <h1>Welcome to @Model.ComapnyInfo.CompanyName</h1>
+
+
+    <img src="@(Model.ComapnyInfo.LogoUrl)" width="300" height="300" alt="Company Logo" title="Company Logo" loading="lazy" />
+    
+    @if(Model.Note > -1)
+    {
+            <div> Ocena Firmy:@Model.Note </div>        
+    }
+
+    else
+    {
+        <div>Firma nie osiada ocen </div>        
+    }
+
+
 </header>
 
 <section>
     <h2>About Us</h2>
-    <p>@Model.Description</p>
+    <p>@Model.ComapnyInfo.Description</p>
 </section>
 
-@{
 
 
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+
+@if (ViewBag.Type == 1 && ViewBag.Accepted == false)
+{
+    if(ViewBag.CanDelete)
+    {
+        <form method="post" asp-action="CancelRequest" asp-controller="Type1">
+            <input type="hidden" name="Id_Work_Group" value="@ViewBag.Id_Work_Group" />
+            <input type="hidden" name="User_Id" value="@ViewBag.User" />
+
+            <button type="submit">Usuń prośbe od dołaczenie do zespołu </button>
+        </form>
+    }
+    else
+    {
+        <form method="post" asp-action="SendRequest" asp-controller="Type1">
+            <input type="hidden" name="Id_Work_Group" value="@ViewBag.Id_Work_Group" />
+            <input type="hidden" name="User_Id" value="@ViewBag.User" />
+
+            <button type="submit">Wyślij prośbe od dołaczenie do zespołu </button>
+        </form>
+    }
+
+
+
+
+
+
+}
+
+
+@if (ViewBag.Type == 1 && ViewBag.Accepted == true)
+{
+    @if (ViewBag.listId_Timetable.Count > 0)
+    {
+        int i = 1;
+        @foreach (Worker_Timetable worker_Timetable in ViewBag.listId_Timetable)
+        {
+            <form method="get" asp-action="DayWorkerClaim" asp-controller="Type1">
+                <input type="hidden" name="Id_Timetable" value="@worker_Timetable.Id_Timetable" />
+
+                <button type="submit">Zajmij termin w grafiku</button>
+            </form>
+            <br />
+            <br />
+        }
+    }
+}
+
+
+@if (ViewBag.Type == 2)
+{
+    @if (ViewBag.listId_Timetable.Count > 0)
+    {
+        int i = 1;
+        @foreach (Customer_Timetable customer_Timetable in ViewBag.listId_Timetable)
+        {
+            <form method="get" asp-action="DayCustomerClaim" asp-controller="Type2">
+                <input type="hidden" name="Id_Timetable" value="@customer_Timetable.Id_Timetable" />
+
+                <button type="submit">Zajmij termin w grafiku</button>
+            </form>
+            <br />
+            <br />
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+@if (ViewBag.Type == 2)
+{
+
+
+@if (Model.YourOpinion == null)
+{
+
+    <h2>Dodaj opinie</h2>
+    <form method="post" asp-action="AddOpinion" asp-controller="Company">
+
+        <label for="IsAnonymously">Czy opinia ma być anonimowa</label>
+        <input type="checkbox" name="IsAnonymously" value="true" title="Czy chcesz aby opinia była anonimowa">
+
+
+        <label for="OpinionScore">Podaj od 0 10 ocene firmy</label>
+        <select id="OpinionScore" name="OpinionScore">
+            @for (int i = 0; i <= 10; i++)
+            {
+                <option value="@i">@i</option>
+            }
+        </select>
+
+        <label for="OpinionText">Napisz opinie</label>
+        <input type="text" id="OpinionText" name="OpinionText" value="" placeholder="Napisz opinie co ci się podoba lub nie w tej firmie" required pattern="[A-Za-z]+" title="Napisz opinie" maxlength="50" minlength="10" size="30">
+
+        <input type="hidden" id="Id_Company" name="Id_Company" value="@Model.ComapnyInfo.Id_Company" />
+
+
+        <button type="submit">Dodaj opinie</button>
+    </form>
+}
+
+
+
+
+
+
+
+
+    @if(Model.YourOpinion != null)
+    {
+    <div id="YourOpinion">
+        <div>
+            <h4>Ocena:</h4>
+            <p>@Model.YourOpinion.Score</p>
+
+            <h4>Opinia:</h4>
+            <p>@Model.YourOpinion.Text</p>
+
+            <h4>Anonimowa:</h4>
+            <p>@(Model.YourOpinion.Anonymously ? "Tak" : "Nie")</p>
+        </div>
+
+        <form method="post" asp-action="DeleteOpinion" asp-controller="Company">
+            <input type="hidden" name="Id" value="@Model.YourOpinion.Id" />
+
+            <button type="submit">Usuń opinie</button>
+        </form>
+
+        <button type="button" onclick="showEditForm()">Edytuj opinię</button>
+
+        <form id="editOpinionForm" method="post" asp-action="EditOpinion" asp-controller="Company" style="display: none;">
+            <label for="IsAnonymously">Czy opinia ma być anonimowa</label>
+
+            @if(Model.YourOpinion.Anonymously)
+            {
+                <input type="checkbox" name="IsAnonymously" value="true" title="Czy chcesz, aby opinia była anonimowa" checked>
+            }
+            else
+            {
+                <input type="checkbox" name="IsAnonymously" value="true" title="Czy chcesz, aby opinia była anonimowa">
+            }
+
+
+            <label for="OpinionScore">Podaj od 0 do 10 ocenę firmy</label>
+            <select id="OpinionScore" name="OpinionScore" value=@Model.YourOpinion.Score>
+                @for (int i = 0; i <= 10; i++)
+                {
+                    if(i==Model.YourOpinion.Score)
+                    {
+                        <option value="@i" selected>@i</option>
+
+                    }
+                    else
+                    {
+                        <option value="@i">@i</option>
+                    }
+                }
+            </select>
+
+            <label for="OpinionText">Napisz opinię</label>
+            <input type="text" id="OpinionText" name="OpinionText" placeholder="Napisz opinie co ci się podoba lub nie w tej firmie" value=@Model.YourOpinion.Text required pattern="[A-Za-z]+" title="Napisz opinię" maxlength="50" minlength="10" size="30">
+
+            <input type="hidden" id="Id" name="Id" value="@Model.YourOpinion.Id"/>
+
+            <button type="submit">Zapisz edycję opinii</button>
+        </form>
+
+        <script>
+            function showEditForm() {
+                var editForm = document.getElementById("editOpinionForm");
+
+                var currentDisplay = editForm.style.display;
+
+                editForm.style.display = (currentDisplay === "block") ? "none" : "block";
+            }
+        </script>
+    </div>
+    }
+
+
+
+
+    
+    <div id="Opinions">
+        Wszystkie opinie:
+        <br />
+
+
+
+
+        @if (Model.YourOpinion == null)
+        {
+             @foreach (var opinion in Model.Opinions)
+            {
+                <br />
+                <br />
+                <br />
+                <div>
+                    <h4>Ocena:</h4>
+                    <p>@opinion.Score</p>
+
+                    <h4>Opinia:</h4>
+                    <p>@opinion.Text</p>
+
+                    <h4>Anonimowa:</h4>
+                    <p>@(opinion.Anonymously ? "Tak" : "Nie")</p>
+                </div>
+            }  
+        }
+        else
+        {
+            @foreach (var opinion in Model.Opinions)
+            {
+                if (opinion.Id != Model.YourOpinion.Id)
+                {
+
+                <br />
+                <br />
+                <br />
+                <div>
+                    <h4>Ocena:</h4>
+                    <p>@opinion.Score</p>
+
+                    <h4>Opinia:</h4>
+                    <p>@opinion.Text</p>
+
+                    <h4>Anonimowa:</h4>
+                    <p>@(opinion.Anonymously ? "Tak" : "Nie")</p>
+                </div>
+
+                }
+            }
+        }
+
+
+
+    </div>
+    
 }

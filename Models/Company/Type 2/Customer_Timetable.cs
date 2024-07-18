@@ -10,7 +10,7 @@ namespace SchiftPlanner.Models.Company.Type_2
 
         public int Id_Company { get; set; }
 
-        public DateTime Break_after_Client { get; set; }
+        public ushort Break_after_Client { get; set; }
 
         public ushort Column {  get; set; }
         public ushort Simultant { get; set; }

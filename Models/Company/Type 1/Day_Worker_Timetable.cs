@@ -12,8 +12,8 @@ namespace SchiftPlanner.Models.Company
         public int Id_Timetable { get; set; }
         public bool IsWork { get; set; }
         public DateTime Date { get; set; }
-        public DateTime TimeStart { get; set; }
-        public DateTime TimeEnd { get; set; }
+        public TimeSpan TimeStart { get; set; }
+        public TimeSpan TimeEnd { get; set; }
 
         public List<Day_Worker_Claimed> Day_Plan_Claimed { get; set; }
 

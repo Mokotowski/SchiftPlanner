@@ -7,9 +7,13 @@ namespace SchiftPlanner.Models.Company.Type_1
 
         [Key]
         public string Timetable_Day_User { get; set; } // Id_Timetable.Date.User
+        public int Id_Timetable { get; set; }
+
         public string Timetable_Day { get; set; } // Id_Timetable.Date
-        public DateTime TimeStart { get; set; }
-        public DateTime TimeEnd { get; set; }
+        public DateTime Date { get; set; }
+
+        public TimeSpan TimeStart { get; set; }
+        public TimeSpan TimeEnd { get; set; }
 
         public string Id_User { get; set; }
 

@@ -6,16 +6,14 @@
     @foreach(var sub in Model)
     {
         <div>
-            <div>
-            @sub.Id_Company
-            </div>
-        
-            <div>
-            @sub.StartDate - @sub.EndDate;
-            </div>
+            @sub.StartDate - @sub.EndDate
         </div>
 
-        <a asp-controller="Subs" asp-action="ManageSub" asp-route-id="@sub">Manage This Subscription</a>
+         <form method="get" asp-action="ManageSub" asp-controller="Subs">
+            <input type="hidden" id="Id_Company" name="Id_Company" value="@sub.Id_Company" />
+            <button type="submit">Zarządzaj</button>
+        </form>
+        <br/>
     }
 
 

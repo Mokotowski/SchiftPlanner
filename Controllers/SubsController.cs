@@ -28,7 +28,7 @@ namespace SchiftPlanner.Controllers
 
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             List<Type_Subscriptions> type_Subscriptions = _context.Type_Subscriptions.ToList(); 
             return View(type_Subscriptions);
@@ -84,10 +84,44 @@ namespace SchiftPlanner.Controllers
         }
 
 
+        public async Task<bool> IsAuth(int Id_Comapny, UserModel user)
+        {
+            Subscriptions? subscription = _context.Subscriptions.Find(Id_Comapny);
+
+            if (subscription != null) 
+            {
+                if (subscription.Id_User == user.Id)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+
+
         [HttpGet]
-        public async Task<IActionResult> ManageSub(Subscriptions subscription)
+        public async Task<IActionResult> ManageSub(int Id_Company)
         {
-            return View(subscription);
+            bool auth = await IsAuth(Id_Company, await _userManager.GetUserAsync(User));
+            if (auth) 
+            {
+                Subscriptions subscription = _context.Subscriptions.Find(Id_Company);
+
+                Type_Subscriptions type_Subscriptions = _context.Type_Subscriptions.Find(subscription.Id_Sub);
+
+                ViewBag.CompanyType = type_Subscriptions.TypeCompany;
+
+                if (ViewBag.CompanyType == 1)
+                {
+                    ViewBag.Company_Type1 = _context.Company_Type1.Where(f => f.Id_Company == Id_Company).Single();
+                }
+
+                return View(subscription);
+            }
+
+            return RedirectToAction("NotAuthorized", "Home");
         }
 
 
@@ -101,53 +135,53 @@ namespace SchiftPlanner.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> ChangeAutoRenew(Subscriptions subscription)
+        public async Task<IActionResult> ChangeAutoRenew(int Id_Company)
         {
-            Subscriptions UpdateSubscriptions = _context.Subscriptions.FirstOrDefault(s => s.Id_Sub == subscription.Id_Sub);
+            bool auth = await IsAuth(Id_Company, await _userManager.GetUserAsync(User));
 
-
-            if (UpdateSubscriptions.AutoRenew == true)
+            if (auth)
             {
-                UpdateSubscriptions.AutoRenew = false;
-            }
-            else
-            {
-                UpdateSubscriptions.AutoRenew = true;
+                Subscriptions UpdateSubscriptions = _context.Subscriptions.Find(Id_Company);
+
+                if (UpdateSubscriptions.AutoRenew == true)
+                {
+                    UpdateSubscriptions.AutoRenew = false;
+                }
+                else
+                {
+                    UpdateSubscriptions.AutoRenew = true;
+                }
+
+                _context.SaveChanges();
+
+                return RedirectToAction("ManageSub", new { Id_Company = Id_Company });
             }
 
-            _context.SaveChanges();
-            
-            return await ManageSub(subscription);
+            return RedirectToAction("NotAuthorized", "Home");
         }
 
 
 
         [HttpPost]
-        public async Task<IActionResult> CancelSubscription(Subscriptions subscription)
+        public async Task<IActionResult> CancelSubscription(int Id_Company)
         {
+            bool auth = await IsAuth(Id_Company, await _userManager.GetUserAsync(User));
 
-            Subscriptions UpdateSubscriptions = _context.Subscriptions.FirstOrDefault(s => s.Id_Sub == subscription.Id_Sub);
-
-            if (UpdateSubscriptions.AutoRenew == true)
+            if (auth)
             {
-                UpdateSubscriptions.AutoRenew = false;
-            }
-            else
-            {
-                UpdateSubscriptions.AutoRenew = true;
+                Subscriptions UpdateSubscriptions = _context.Subscriptions.Find(Id_Company);
+
+                if (UpdateSubscriptions.AutoRenew == true)
+                {
+                    UpdateSubscriptions.AutoRenew = false;
+                }
+
+                _context.SaveChanges();
+
+                return RedirectToAction("ManageSub", new { Id_Company = Id_Company });
             }
 
-            _context.SaveChanges();
-
-            return await ManageSub(subscription);
+            return RedirectToAction("NotAuthorized", "Home");
         }
-
-
-
-
-
-
-
-
     }
 }

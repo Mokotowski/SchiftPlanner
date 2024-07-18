@@ -21,20 +21,87 @@ body {
   margin-bottom: 60px;
 }
 
+.container {
+    margin: 0px;
+}
 
+
+
+/* Subs */
+
+#mainBoxSubs {
+    width: 100vw;
+    height: 40vh;
+    justify-content: center;
+
+}
 
 
 #ListSubs {
-    height: 600px;
     display: flex;
     flex-direction: row;
-    background-color: beige;
+    flex-wrap: nowrap;
+    width: 100vw;
+    height: 40vh;
+    justify-content: center;
 }
+
 
 
 .SubElement {
-    height: 100%;
-    width: 100px;
     display: flex;
     flex-direction: column;
+    height: 80%;
+    width: 10vw;
+    border: 1px solid #ccc;
+    padding: 2%;
+    margin: 1vw;
 }
+
+
+
+
+    .SubElement button[type="submit"] {
+        display: relative;
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+        .SubElement button[type="submit"]:hover {
+            background-color: #45a049; 
+        }
+
+
+#secondBoxSubs {
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+
+
+}
+
+
+/* Style dla przycisku "Wiêcej informacji o subskrypcjach" */
+#secondBoxSubs button[type="submit"] {
+    background-color: #008CBA; /* Niebieski kolor t³a */
+    color: white; /* Bia³y kolor tekstu */
+    padding: 10px 20px; /* Wewnêtrzny padding */
+    border: none; /* Brak obramowania */
+    border-radius: 4px; /* Zaokr¹glenie rogów */
+    cursor: pointer; /* Kursor wskazuj¹cy na interakcjê */
+}
+
+    /* Efekt po najechaniu na przycisk "Wiêcej informacji o subskrypcjach" */
+    #secondBoxSubs button[type="submit"]:hover {
+        background-color: #005f73; /* Ciemniejszy odcieñ niebieskiego t³a */
+    }
+
+
+
+
+
+
