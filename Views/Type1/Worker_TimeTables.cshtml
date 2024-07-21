@@ -19,9 +19,7 @@
     <input type="checkbox" name="IsWork" value="true" title="Czy te dni mają być robocze">
     <input type="date" name="DayStart" value="" />
     <input type="date" name="DayEnd" value="" />
-
-
-
+    <input type="hidden" name="Id_Company" value="@ViewBag.Id_Company" />
 
     <button type="submit">Zmień dzień na nie-roboczy</button>
 </form>
@@ -57,8 +55,8 @@
 
     <label for="IsWork">Czy jest dniem pracującym?</label>
     <input type="checkbox" name="IsWork" value="true" />
+    <input type="hidden" name="Id_Company" value="@ViewBag.Id_Company" />
 
-    <br />
 
     <button type="submit">Zmień dzień na nie-roboczy</button>
 </form>
@@ -111,6 +109,7 @@
     <input type="time" name="end" />
 
     <br />
+    <input type="hidden" name="Id_Company" value="@ViewBag.Id_Company" />
 
     <button type="submit">Zapisz</button>
 </form>
@@ -149,6 +148,7 @@
     <input type="time" name="end" />
 
     <br />
+    <input type="hidden" name="Id_Company" value="@ViewBag.Id_Company" />
 
     <button type="submit">Zapisz</button>
 </form>
@@ -190,6 +190,8 @@
     <input type="time" name="end" />
 
     <br />
+    <input type="hidden" name="Id_Company" value="@ViewBag.Id_Company" />
+
 
     <button type="submit">Zapisz</button>
 </form>
@@ -227,6 +229,7 @@
     {
         <form method="post" asp-action="EditIsWorkSingleDay" asp-controller="Type1">
             <input type="hidden" name="Timetable_Day" value="@timetable.Timetable_Day" />
+            <input type="hidden" name="Id_Company" value="@ViewBag.Id_Company" />
 
             <button type="submit">Zmień dzień na nie-roboczy</button>
         </form>
@@ -235,6 +238,7 @@
     {
         <form method="post" asp-action="EditIsWorkSingleDay" asp-controller="Type1">
             <input type="hidden" name="Timetable_Day" value="@timetable.Timetable_Day" />
+            <input type="hidden" name="Id_Company" value="@ViewBag.Id_Company" />
 
             <button type="submit">Zmień dzień na roboczy</button>
         </form>
@@ -249,13 +253,13 @@
 
         <label for="startTime">Czas rozpoczęcia:</label>
         <input type="time" id="startTime" name="start" value=@timetable.TimeStart required>
-
         <br>
 
         <label for="endTime">Czas zakończenia:</label>
         <input type="time" id="endTime" name="end" value=@timetable.TimeEnd required>
 
         <br>
+        <input type="hidden" name="Id_Company" value="@ViewBag.Id_Company" />
 
         <button type="submit">Zmień czas pracy</button>
     </form>

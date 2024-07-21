@@ -93,6 +93,7 @@
                 <input type="time" name="TimeEnd" />
 
                 <br />
+                <input type="hidden" name="Id_Company" value="@ViewBag.Id_Company" />
 
                 <button type="submit">Zajmij termin</button>
             </form>
@@ -144,6 +145,7 @@
                             <input type="time" name="TimeEnd" value="@_daysClaimed[k].TimeEnd" />
 
                             <br />
+                            <input type="hidden" name="Id_Company" value="@ViewBag.Id_Company" />
 
                             <button type="submit">Edytuj termin</button>
                         </form>
@@ -154,6 +156,7 @@
 
                         <form id="@formforedit" method="post" asp-action="DeleteTerm" asp-controller="Type1">
                             <input type="hidden" name="Timetable_Day_User" value="@_daysClaimed[k].Timetable_Day_User" />
+                            <input type="hidden" name="Id_Company" value="@ViewBag.Id_Company" />
 
                             <button type="submit">Delete</button>
                         </form>
@@ -225,6 +228,7 @@
                     <input type="time" name="TimeEnd" />
 
                     <br />
+                    <input type="hidden" name="Id_Company" value="@ViewBag.Id_Company" />
 
                     <button type="submit">Zajmij termin</button>
                 </form>
@@ -275,6 +279,7 @@
                                 <input type="time" name="TimeEnd" value="@_daysClaimed[k].TimeEnd" />
 
                                 <br />
+                                <input type="hidden" name="Id_Company" value="@ViewBag.Id_Company" />
 
                                 <button type="submit">Edytuj termin</button>
                             </form>
@@ -283,6 +288,7 @@
 
                             <form id="@formforedit" method="post" asp-action="DeleteTerm" asp-controller="Type1">
                                 <input type="hidden" name="Timetable_Day_User" value="@_daysClaimed[k].Timetable_Day_User" />
+                                <input type="hidden" name="Id_Company" value="@ViewBag.Id_Company" />
 
                                 <button type="submit">Delete</button>
                             </form>
@@ -332,9 +338,6 @@
 
 
 
-
-
-
 <script>
     function showEditForm(iddd) {
         var editForm = document.getElementById(iddd);
@@ -344,14 +347,6 @@
         editForm.style.display = (currentDisplay === "block") ? "none" : "block";
     }
 </script>
-
-
-
-
-
-
-
-
 
 
 

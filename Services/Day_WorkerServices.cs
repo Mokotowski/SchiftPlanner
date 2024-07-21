@@ -28,7 +28,7 @@ namespace SchiftPlanner.Services
 
         public async Task EditIsWorkSingleDay(string Timetable_Day)
         {
-            Day_Worker_Timetable day = _context.Day_Worker_Timetable.Where(s => s.Timetable_Day == Timetable_Day).FirstOrDefault();
+            Day_Worker_Timetable day = _context.Day_Worker_Timetable.Where(s => s.Timetable_Day == Timetable_Day).Single();
             if (day.IsWork == true)
             {
                 day.IsWork = false;
@@ -40,7 +40,6 @@ namespace SchiftPlanner.Services
 
             _context.SaveChanges();
         }
-
 
 
         public async Task EditIsWorkRangeOfDays(int Id_Timetable, DateTime DayStart, DateTime DayEnd, bool IsWork)
@@ -102,8 +101,6 @@ namespace SchiftPlanner.Services
             }
         }
 
-
-
         public async Task<bool> StartEndCheck(string Timetable_Day, TimeSpan TimeStart, TimeSpan TimeEnd)
         {
             Day_Worker_Timetable day_Worker_ = _context.Day_Worker_Timetable.Find(Timetable_Day);
@@ -126,7 +123,7 @@ namespace SchiftPlanner.Services
 
         public async Task ClaimTerm(int Id_Timetable, string Timetable_Day, DateTime dateTime, TimeSpan TimeStart, TimeSpan TimeEnd, UserModel userModel)
         {
-            Worker_Timetable Worker_ = _context.Worker_Timetable.Where(s => s.Id_Timetable == Id_Timetable).First();
+            Worker_Timetable Worker_ = _context.Worker_Timetable.Where(s => s.Id_Timetable == Id_Timetable).Single();
             bool isAvailable = await IsTermChecked(null, dateTime, TimeStart, TimeEnd, Id_Timetable);
             bool startendcheck = await StartEndCheck(Timetable_Day, TimeStart, TimeEnd);
 
@@ -141,7 +138,7 @@ namespace SchiftPlanner.Services
                     TimeStart = TimeStart,
                     TimeEnd = TimeEnd,
                     Id_User = userModel.Id,
-                    Day_Worker_Timetable = _context.Day_Worker_Timetable.Where(s => s.Timetable_Day == Timetable_Day).FirstOrDefault()
+                    Day_Worker_Timetable = _context.Day_Worker_Timetable.Where(s => s.Timetable_Day == Timetable_Day).Single()
                 };
 
                 _context.Day_Worker_Claimed.Add(day_Worker);
@@ -152,7 +149,7 @@ namespace SchiftPlanner.Services
 
         public async Task UpdateTerm(int Id_Timetable, string Timetable_Day_User, string Timetable_Day, DateTime dateTime, TimeSpan TimeStart, TimeSpan TimeEnd, UserModel userModel)
         {
-            Worker_Timetable Worker_ = _context.Worker_Timetable.Where(s => s.Id_Timetable == Id_Timetable).First();
+            Worker_Timetable Worker_ = _context.Worker_Timetable.Where(s => s.Id_Timetable == Id_Timetable).Single();
             bool isAvailable = await IsTermChecked(Timetable_Day_User, dateTime, TimeStart, TimeEnd, Id_Timetable);
             bool startendcheck = await StartEndCheck(Timetable_Day, TimeStart, TimeEnd);
 
@@ -183,33 +180,15 @@ namespace SchiftPlanner.Services
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         public async Task EditTimeWorkSingleDay(string Timetable_Day, TimeSpan start, TimeSpan end)
         {
-            Day_Worker_Timetable day = _context.Day_Worker_Timetable.Where(s => s.Timetable_Day == Timetable_Day).FirstOrDefault();
+            Day_Worker_Timetable day = _context.Day_Worker_Timetable.Where(s => s.Timetable_Day == Timetable_Day).Single();
             day.TimeStart = start;
             day.TimeEnd = end;
 
             _context.SaveChanges();
         }
+
 
         public async Task EditTimeWorkAll(int Id_Timetable, TimeSpan start, TimeSpan end)
         {
@@ -222,8 +201,6 @@ namespace SchiftPlanner.Services
 
             _context.SaveChanges();
         }
-
-
 
 
         public async Task EditTimeWorkRangeOfDays(int Id_Timetable, DateTime DayStart, DateTime DayEnd, TimeSpan start, TimeSpan end)
@@ -259,18 +236,6 @@ namespace SchiftPlanner.Services
 
             _context.SaveChanges();
         }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

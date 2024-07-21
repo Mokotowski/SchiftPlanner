@@ -74,7 +74,7 @@ namespace SchiftPlanner.Services
         public async Task DeleteOpinions(int Id)
         {
 
-            Opinions opinionTodelete = _context.Opinions.Where(c => c.Id == Id).FirstOrDefault();
+            Opinions opinionTodelete = _context.Opinions.Find(Id);
        
             _context.Opinions.RemoveRange(opinionTodelete);
             _context.SaveChanges();
@@ -82,7 +82,7 @@ namespace SchiftPlanner.Services
         }
         public async Task EditOpinions(int Id, bool IsAnonymously, int OpinionScore, string OpinionText)
         {
-            Opinions opinion = _context.Opinions.Where(c => c.Id == Id).FirstOrDefault();
+            Opinions opinion = _context.Opinions.Find(Id);
 
             opinion.Text = OpinionText;
             opinion.Anonymously = IsAnonymously;
