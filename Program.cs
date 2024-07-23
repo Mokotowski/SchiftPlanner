@@ -69,21 +69,23 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
+
 builder.Services.AddSingleton<IEmailSender, EmailSender>();
+
 builder.Services.AddScoped<ISubsServices, SubsServices>();
-builder.Services.AddScoped<IOpinionServices, OpinionServices>();
-builder.Services.AddScoped<ICustomer_TimeTableServices, Customer_TimeTableServices>();
-builder.Services.AddScoped<IDay_CustomerServicesFirstGenerate, Day_CustomerServices>();
-builder.Services.AddScoped<IDay_Customer_EditServices, Day_CustomerServices>();
-builder.Services.AddScoped<IDay_Term, Day_CustomerServices>();
+builder.Services.AddScoped<IOpinionServices, OpinionServices>(); 
+builder.Services.AddScoped<ICustomer_TimeTableServices, Customer_TimeTableServices>(); 
+builder.Services.AddScoped<IDay_CustomerServicesFirstGenerate, Day_CustomerServices>(); 
+builder.Services.AddScoped<IDay_Customer_EditServices, Day_CustomerServices>(); 
+builder.Services.AddScoped<IDay_Term_Customer, Day_CustomerServices>(); 
 
-builder.Services.AddScoped<IDay_WorkerServicesFirstGenerate, Day_WorkerServices>();
-builder.Services.AddScoped<IDay_Worker_EditServices, Day_WorkerServices>();
-builder.Services.AddScoped<IDay_Term, Day_WorkerServices>();
+builder.Services.AddScoped<IDay_WorkerServicesFirstGenerate, Day_WorkerServices>(); 
+builder.Services.AddScoped<IDay_Worker_EditServices, Day_WorkerServices>(); 
+builder.Services.AddScoped<IDay_Term_Worker, Day_WorkerServices>(); 
 
-builder.Services.AddScoped<IWorker_TimeTableServices, Worker_TimeTableServices>();
+builder.Services.AddTransient<IWorker_TimeTableServices, Worker_TimeTableServices>(); 
+builder.Services.AddTransient<IWorker_Functions, Worker_Functions>(); 
 
-builder.Services.AddScoped<IWorker_Functions, Worker_Functions>();
 
 
 

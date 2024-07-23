@@ -11,7 +11,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SchiftPlanner.Services
 {
-    public class Day_WorkerServices : IDay_WorkerServicesFirstGenerate, IDay_Worker_EditServices, IDay_Term
+    public class Day_WorkerServices : IDay_WorkerServicesFirstGenerate, IDay_Worker_EditServices, IDay_Term_Worker
     {
         private readonly DatabaseContext _context;
         public Day_WorkerServices(DatabaseContext context)

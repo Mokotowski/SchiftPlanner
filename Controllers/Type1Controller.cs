@@ -20,10 +20,10 @@ namespace SchiftPlanner.Controllers
         private readonly IWorker_TimeTableServices _TimeTableServices;
         private readonly IDay_WorkerServicesFirstGenerate _firstGenerate;
         private readonly IDay_Worker_EditServices _day_Worker_EditServices;
-        private readonly IDay_Term _day_Term;
+        private readonly IDay_Term_Worker _day_Term;
         private readonly IWorker_Functions _functions;
 
-        public Type1Controller(DatabaseContext context, UserManager<UserModel> userManager, SignInManager<UserModel> signInManager, IWorker_TimeTableServices TimeTableServices, IDay_Worker_EditServices day_Worker_EditServices, IDay_WorkerServicesFirstGenerate firstGenerate, IDay_Term day_Term, IWorker_Functions functions)
+        public Type1Controller(DatabaseContext context, UserManager<UserModel> userManager, SignInManager<UserModel> signInManager, IWorker_TimeTableServices TimeTableServices, IDay_Worker_EditServices day_Worker_EditServices, IDay_WorkerServicesFirstGenerate firstGenerate, IDay_Term_Worker day_Term, IWorker_Functions functions)
         {
             _context = context;
             _userManager = userManager;

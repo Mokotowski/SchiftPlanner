@@ -66,7 +66,6 @@
     @for (int i = 0; i < AddDay(Model.days[0].Date.DayOfWeek); i++)
     {
         <div style="width: 11%; height: 400px; background-color: aquamarine; margin:1.5%">
-
         </div>
     }
 
@@ -99,7 +98,7 @@
             </form>
 
 
-            
+
             <div class="allday">
                 <div class="startday">
                     @Model.days[0].TimeStart
@@ -155,6 +154,7 @@
 
                         <form id="@formforedit" method="post" asp-action="DeleteTerm" asp-controller="Type2">
                             <input type="hidden" name="Timetable_Day_User" value="@_daysClaimed[k].Timetable_Day_User" />
+                            <input type="hidden" name="Id_Company" value="@ViewBag.Id_Company" />
 
                             <button type="submit">Delete</button>
                         </form>
@@ -165,9 +165,9 @@
                     @Model.days[0].TimeEnd
                 </div>
             </div>
-            
 
-            
+
+
 
         </div>
     }
@@ -204,7 +204,7 @@
 
                 @{
                     string s = "ClaimOpinionForm" + i.ToString();
-                 }
+                }
 
                 <button type="button" onclick="showEditForm('@s')">Zajmij termin pokaż</button>
 
@@ -263,7 +263,7 @@
                                 <input type="hidden" name="Timetable_Day" value="@Model.days[i].Timetable_Day" />
                                 <input type="hidden" name="dateTime" value="@Model.days[i].Date" />
                                 <input type="hidden" name="Timetable_Day_User" value="@_daysClaimed[k].Timetable_Day_User" />
-                                
+
 
                                 <br />
 
@@ -284,6 +284,7 @@
 
                             <form id="@formforedit" method="post" asp-action="DeleteTerm" asp-controller="Type2">
                                 <input type="hidden" name="Timetable_Day_User" value="@_daysClaimed[k].Timetable_Day_User" />
+                                <input type="hidden" name="Id_Company" value="@ViewBag.Id_Company" />
 
                                 <button type="submit">Delete</button>
                             </form>
@@ -306,7 +307,7 @@
 
 
 
-        } 
+        }
         else
         {
             <div style="width: 11%; height: 400px; background-color: red; margin:1.5%">
@@ -317,7 +318,7 @@
 
         numer++;
 
-        if(numer == 7)
+        if (numer == 7)
         {
             <div> </div>
         }
@@ -345,7 +346,6 @@
         editForm.style.display = (currentDisplay === "block") ? "none" : "block";
     }
 </script>
-
 
 
 

@@ -2,7 +2,7 @@
 
 namespace SchiftPlanner.Services.Interfaces
 {
-    public interface IDay_Term
+    public interface IDay_Term_Customer
     {
         public Task ClaimTerm(int Id_Timetable, string Timetable_Day, DateTime dateTime, TimeSpan TimeStart, TimeSpan TimeEnd, UserModel userModel);
         public Task UpdateTerm(int Id_Timetable, string Timetable_Day_User, string Timetable_Day, DateTime dateTime, TimeSpan TimeStart, TimeSpan TimeEnd, UserModel userModel);
@@ -10,3 +10,4 @@ namespace SchiftPlanner.Services.Interfaces
 
     }
 }
+ 
