@@ -591,5 +591,27 @@ namespace SchiftPlanner.Controllers
                 return RedirectToAction("NotLogged", "Authorized");
             }
         }
+
+
+
+        public async Task<IActionResult> CheckWorkTime(int Id_Company)
+        {
+            if (User != null && _signInManager.IsSignedIn(User))
+            {
+                if (await IsAuth(Id_Company))
+                {
+                    List<(string Id_User, int Month, int Year, double TotalHours)> Users_and_Time = await _functions.CountWorkerTime(Id_Company);
+
+
+                    return View(Users_and_Time);
+                }
+
+                return RedirectToAction("NotAuthorized", "Authorized");
+            }
+            else
+            {
+                return RedirectToAction("NotLogged", "Authorized");
+            }
+        }
     }
 }

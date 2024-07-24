@@ -284,17 +284,6 @@ namespace SchiftPlanner.Controllers
         {
             if (User != null && _signInManager.IsSignedIn(User))
             {
-                Console.WriteLine("public async Task<IActionResult> ClaimTerm");
-                Console.WriteLine("public async Task<IActionResult> ClaimTerm");
-                Console.WriteLine("public async Task<IActionResult> ClaimTerm");
-                Console.WriteLine("public async Task<IActionResult> ClaimTerm");
-                Console.WriteLine("public async Task<IActionResult> ClaimTerm");
-                Console.WriteLine("public async Task<IActionResult> ClaimTerm");
-                Console.WriteLine("public async Task<IActionResult> ClaimTerm");
-                Console.WriteLine("public async Task<IActionResult> ClaimTerm");
-                Console.WriteLine("public async Task<IActionResult> ClaimTerm");
-                Console.WriteLine("public async Task<IActionResult> ClaimTerm");
-
                 UserModel userModel = await _userManager.GetUserAsync(User);
                 _day_Term.ClaimTerm(Id_Timetable, Timetable_Day, dateTime, TimeStart, TimeEnd, userModel);
                 return RedirectToAction("DayCustomerClaim", "Type2", new { Id_Timetable = Id_Timetable });

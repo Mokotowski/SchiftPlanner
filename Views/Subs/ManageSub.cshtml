@@ -77,7 +77,17 @@ else if (ViewBag.CompanyType == 2)
     </form>
 }
 
+<br />
+<br />
+<br />
 
+@if (ViewBag.CompanyType == 1)
+{
+    <form method="get" asp-action="CheckWorkTime" asp-controller="Type1">
+        <input type="hidden" name="Id_Company" value="@Model.Id_Company" />
+        <button type="submit">Sprawdź czas pracy poszczególnych pracowników</button>
+    </form>
+}
 
 <br />
 <br />
@@ -86,7 +96,7 @@ else if (ViewBag.CompanyType == 2)
 
 @if(Model.AutoRenew)
 {
-             <form method="post" asp-action="ChangeAutoRenew" asp-controller="Subs">
+        <form method="post" asp-action="ChangeAutoRenew" asp-controller="Subs">
         <input type="hidden" name="Id_Company" value="@Model.Id_Sub" />
             <button type="submit">Wyłącz odnawianie</button>
         </form>
@@ -110,9 +120,15 @@ else
 <br />
 
 
-     <form method="post" asp-action="CancelSubscription" asp-controller="Subs">
-    <input type="hidden" name="Id_Company" value="@Model.Id_Sub" />
+@if (Model.AutoRenew)
+{
+    <form method="post" asp-action="CancelSubscription" asp-controller="Subs">
+        <input type="hidden" name="Id_Company" value="@Model.Id_Sub" />
         <button type="submit">Anuluj subskrypcje</button>
     </form>
+}
+
+
+
 
 

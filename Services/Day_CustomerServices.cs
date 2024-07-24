@@ -123,21 +123,6 @@ namespace SchiftPlanner.Services
 
         public async Task ClaimTerm(int Id_Timetable, string Timetable_Day, DateTime dateTime, TimeSpan TimeStart, TimeSpan TimeEnd, UserModel userModel)
         {
-            Console.WriteLine("w serwisie");
-            Console.WriteLine("w serwisie");
-            Console.WriteLine("w serwisie");
-            Console.WriteLine("w serwisie");
-            Console.WriteLine("w serwisie");
-            Console.WriteLine("w serwisie");
-            Console.WriteLine("w serwisie");
-            Console.WriteLine("w serwisie");
-            Console.WriteLine("w serwisie");
-            Console.WriteLine("w serwisie");
-            Console.WriteLine("w serwisie");
-            Console.WriteLine("w serwisie");
-
-
-
             Customer_Timetable customer_ = _context.Customer_Timetable.Where(s => s.Id_Timetable == Id_Timetable).Single();
             bool isAvailable = await IsTermChecked(null, dateTime, TimeStart, TimeEnd, customer_.Break_after_Client, Id_Timetable);
             bool startendcheck = await StartEndCheck(Timetable_Day, TimeStart, TimeEnd);

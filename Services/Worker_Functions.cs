@@ -77,5 +77,38 @@ namespace SchiftPlanner.Services
         }
 
 
+
+
+        public async Task<List<(string Id_User, int Month, int Year, double TotalHours)>> CountWorkerTime(int Id_Company)
+        {
+            var workerTimetables = _context.Worker_Timetable.Where(p => p.Id_Company == Id_Company).ToList();
+            var allTimetablesDays = new List<Day_Worker_Claimed>();
+
+            DateTime now = DateTime.Now;
+            DateTime startDate = new DateTime(now.Year, now.Month, 1).AddMonths(-3);
+            DateTime endDate = new DateTime(now.Year, now.Month, 1).AddDays(-1);
+
+            foreach (var workerTimetable in workerTimetables)
+            {
+                var dayWorkerClaimeds = _context.Day_Worker_Claimed.Where(p => p.Id_Timetable == workerTimetable.Id_Timetable && p.Date >= startDate && p.Date <= endDate).ToList();
+
+                allTimetablesDays.AddRange(dayWorkerClaimeds);
+            }
+
+            var userWorkHours = allTimetablesDays
+                .GroupBy(p => new { p.Id_User, p.Date.Month, p.Date.Year })
+                .Select(g => new
+                {
+                    g.Key.Id_User,
+                    g.Key.Month,
+                    g.Key.Year,
+                    TotalHours = Math.Round(g.Sum(p => (p.TimeEnd - p.TimeStart).TotalHours))
+                })
+                .ToList();
+
+            return userWorkHours.Select(u => (u.Id_User, u.Month, u.Year, u.TotalHours)).ToList();
+        }
+
+
     }
 }

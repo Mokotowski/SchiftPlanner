@@ -213,7 +213,9 @@ namespace SchiftPlanner.Controllers
 
                     _context.SaveChanges();
 
-                    return RedirectToAction("ManageSub", new { Id_Company = Id_Company });
+                    string TimeExpired = UpdateSubscriptions.EndDate.ToString("dd MMMM yyyy");
+
+                    return RedirectToAction("AfterCancelSubscription", new { TimeExpired = TimeExpired });
                 }
 
                 return RedirectToAction("NotAuthorized", "Authorized");
@@ -223,5 +225,14 @@ namespace SchiftPlanner.Controllers
                 return RedirectToAction("NotLogged", "Authorized");
             }
         }
+
+        [HttpGet]
+
+        public async Task<IActionResult> AfterCancelSubscription(string TimeExpired)
+        {
+            ViewBag.TimeExpired = TimeExpired;
+            return View();
+        }
+
     }
 }

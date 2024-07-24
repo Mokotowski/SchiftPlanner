@@ -1,0 +1,26 @@
+﻿@model List<(string Id_User, int Month, int Year, double TotalHours)>
+
+<div style="margin: 20px;">
+    <h2 style="margin-bottom: 30px;">Worker Time Report</h2>
+    <table style="width: 100%; border-collapse: separate; border-spacing: 10px; border: 1px solid #ddd;">
+        <thead>
+            <tr style="background-color: #f2f2f2; font-weight: bold; border-bottom: 2px solid #ddd;">
+                <th style="padding: 10px;">User ID</th>
+                <th style="padding: 10px;">Month</th>
+                <th style="padding: 10px;">Year</th>
+                <th style="padding: 10px;">Total Hours</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr style="border-bottom: 1px solid #ddd;">
+                    <td style="padding: 10px;">@item.Id_User</td>
+                    <td style="padding: 10px;">@item.Month</td>
+                    <td style="padding: 10px;">@item.Year</td>
+                    <td style="padding: 10px;">@item.TotalHours</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

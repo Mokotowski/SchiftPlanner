@@ -15,5 +15,6 @@ namespace SchiftPlanner.Services.Interfaces
         public Task DeleteWorker(int Id_Work_Group, string User_Id);
 
 
+        Task<List<(string Id_User, int Month, int Year, double TotalHours)>> CountWorkerTime(int Id_Company);
     }
 }
